@@ -65,6 +65,16 @@ export default class EmojiStealer {
         this.client.user.setActivity(chooseStatus.name, details)
       }
 
+      const updateBotStats = async (guilds: number, channels: number, users: number) => {
+        return this.botstat.patch('/botstat/' + this.client.user.id, {
+          guilds: guilds,
+          channels: channels,
+          users: users
+        })
+          .then(() => console.info('Uploaded user base stats to API.'))
+          .catch(e => this.logger.error(e))
+      }
+      updateBotStats(guilds, channels, users)
       this.client.setInterval(() => changeStatus(), 120000)
     })
 
