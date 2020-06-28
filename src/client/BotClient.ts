@@ -2,6 +2,7 @@
 import { AkairoClient, CommandHandler, ListenerHandler } from 'discord-akairo'
 import { User, Message } from 'discord.js'
 import * as path from 'path'
+import axios, { AxiosInstance } from 'axios'
 import configFile from '../config'
 
 declare module 'discord-akairo' {
@@ -18,6 +19,7 @@ interface BotOptions {
 
 export default class BotClient extends AkairoClient {
   public config: BotOptions;
+  public botstat: AxiosInstance
   public listenerHandler: ListenerHandler = new ListenerHandler(this, {
     directory: path.join(__dirname, '..', 'events')
   })
@@ -50,6 +52,11 @@ export default class BotClient extends AkairoClient {
     })
 
     this.config = config
+    this.botstat = axios.create({
+      baseURL: 'https://tmuniversal-api.herokuapp.com/api/v1',
+      timeout: 5000,
+      headers: { Authorization: `Bearer ${configFile.botstatToken}` }
+    })
   }
 
   private async _init (): Promise<void> {
