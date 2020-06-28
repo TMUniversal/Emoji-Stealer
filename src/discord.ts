@@ -5,6 +5,7 @@
 import { Client, Message, ActivityOptions, ActivityType } from 'discord.js'
 import { WebhookLogger } from './structures/WebhookLogger'
 import * as path from 'path'
+import config from './config'
 import axios, { AxiosInstance } from 'axios'
 import fs = require('fs')
 
@@ -25,7 +26,7 @@ export default class EmojiStealer {
 
   constructor () {
     this.client = new Client()
-    this.config = require(path.resolve(__dirname, '..', 'data.json'))
+    this.config = config
     this.logger = WebhookLogger.instance
     this.botstat = axios.create({
       baseURL: 'https://tmuniversal-api.herokuapp.com/api/v1',
