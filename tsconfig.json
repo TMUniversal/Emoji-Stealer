@@ -1,0 +1,27 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "esnext",
+    "outDir": "./build",
+    "lib": [
+      "es2017"
+    ],
+    "types": [
+      "node"
+    ],
+    "newLine": "lf",
+    "declaration": true,
+    "sourceMap": true,
+    "pretty": false,
+    "strict": true,
+    "strictNullChecks": false,
+    "skipLibCheck": false,
+    "allowJs": false,
+    "forceConsistentCasingInFileNames": true,
+    "disableSizeLimit": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": false
+  }
+}

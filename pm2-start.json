@@ -1,0 +1,15 @@
+{
+  "apps": [{
+      "name": "emoji-stealer",
+      "script": "src/index.js",
+      "instances": "1",
+      "watch": false,
+      "args": [
+          "--color"
+      ],
+      "merge_logs": true,
+      "output": "./logs/output.log",
+      "error": "./logs/error.log",
+      "autorestart": false
+  }]
+}

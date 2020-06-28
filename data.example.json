@@ -1,0 +1,9 @@
+{
+  "clientToken": "",
+  "webhook": {
+    "id": "",
+    "secret": ""
+  },
+  "botstatToken": "<Token>",
+  "prefix": ">"
+}
