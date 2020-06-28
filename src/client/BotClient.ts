@@ -19,7 +19,7 @@ interface BotOptions {
 export default class BotClient extends AkairoClient {
   public config: BotOptions;
   public listenerHandler: ListenerHandler = new ListenerHandler(this, {
-    directory: path.join(__dirname, '..', 'commands')
+    directory: path.join(__dirname, '..', 'events')
   })
 
   public commandHandler: CommandHandler = new CommandHandler(this, {
