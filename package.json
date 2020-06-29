@@ -2,7 +2,7 @@
   "name": "emoji-stealer",
   "version": "0.1.0",
   "description": "Copy another discord server's emojis.",
-  "main": "build/Bot.js",
+  "main": "build/index.js",
   "scripts": {
     "start": "node .",
     "cs": "npm run build && node .",

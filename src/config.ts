@@ -5,7 +5,7 @@ const file = require(join('..', 'data.json'))
 interface IConfigFile {
     clientToken: string;
     webhook: IWebhook;
-    botstatToken: string;
+    botstatToken?: string;
     prefix: string;
     owners: string | string[];
 }
