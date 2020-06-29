@@ -3,7 +3,7 @@
  * @author Hydractify
  * @see https://github.com/Hydractify/kanna_kobayashi
  */
-import * as moment from 'moment'
+import moment from 'moment'
 import { inspect } from 'util'
 
 import { colors, LogLevel } from '../types/LogLevel'

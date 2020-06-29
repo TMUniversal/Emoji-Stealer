@@ -4,6 +4,7 @@
     "id": "",
     "secret": ""
   },
-  "botstatToken": "<Token>",
-  "prefix": ">"
+  "botstatToken": "<Token>", // Closed API. Request key or leave empty
+	"prefix": ">",
+	"owners": ""
 }

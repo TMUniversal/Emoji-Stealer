@@ -8,11 +8,9 @@ import { MessageAttachment, WebhookClient, WebhookMessageOptions } from 'discord
 import { colors, LogLevel } from '../types/LogLevel'
 import { Logger } from './Logger'
 import { MessageEmbed } from './MessageEmbed'
+import configFile from '../config'
 
-/* eslint-disable-next-line @typescript-eslint/no-var-requires */
-const { webhook: { id, secret } } = require('../../data.json')
-
-const webhook: WebhookClient = new WebhookClient(id, secret)
+const webhook: WebhookClient = new WebhookClient(configFile.webhook.id, configFile.webhook.secret)
 
 export class WebhookLogger extends Logger {
   protected static _instance: WebhookLogger;

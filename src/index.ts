@@ -1,6 +1,5 @@
-'use strict'
+import configFile from './config'
+import BotClient from './client/BotClient'
 
-import Client from './discord'
-
-const bot: Client = new Client()
-bot.start()
+const client = new BotClient({ token: configFile.clientToken, owners: configFile.owners })
+client.start()
