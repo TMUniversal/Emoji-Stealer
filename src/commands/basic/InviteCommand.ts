@@ -6,7 +6,7 @@ import { MessageEmbed } from '../../structures/MessageEmbed'
 export default class InviteCommand extends Command {
   public constructor () {
     super('invite', {
-      aliases: ['invite'],
+      aliases: ['invite', 'addbot'],
       category: 'basic',
       description: {
         content: 'Generate an invite link for the bot.',

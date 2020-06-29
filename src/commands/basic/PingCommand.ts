@@ -5,7 +5,7 @@ import { Message } from 'discord.js'
 export default class PingCommand extends Command {
   public constructor () {
     super('ping', {
-      aliases: ['ping'],
+      aliases: ['ping', 'latency'],
       category: 'basic',
       description: {
         content: 'Check latency',

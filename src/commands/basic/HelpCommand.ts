@@ -51,7 +51,7 @@ export default class HelpCommand extends Command {
       const embed = new MessageEmbed()
         .setTitle(cmd.aliases[0])
         .setDescription(cmd.description.content)
-        .addField('Aliases', '`' + cmd.aliases.slice(1).join('` `') + '`', true)
+        .addField('Aliases', '`' + cmd.aliases.join('` `') + '`', true)
         .addField('Usage', `\`${cmd.description.usage}\``, true)
         .addField('Examples', '`' + cmd.description.examples.join('`\n`') + '`')
         .setFooter(this.client.user.username)
