@@ -5,6 +5,7 @@
     "Loggable",
     "ayanaware",
     "botstat",
-    "printf"
+    "printf",
+    "ratelimit"
   ]
 }
