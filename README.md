@@ -21,7 +21,7 @@
 			<img src="https://img.shields.io/github/contributors/TMUniversal/Emoji-Stealer.svg?style=flat">
 		</a>
 		<a href="https://github.com/TMUniversal/Emoji-Stealer/blob/stable/LICENSE.md">
-			<img src="https://img.shields.io/github/license/TMUniversal/Emoji-Stealer.svg?style=flat-square">
+			<img src="https://img.shields.io/github/license/TMUniversal/Emoji-Stealer.svg?style=flat">
 		</a>
 	</p>
 </div>
