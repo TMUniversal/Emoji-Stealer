@@ -70,7 +70,7 @@ To start the bot, it must first be complied.
 - You may then start with `npm start` or, if you have pm2 installed: `pm2 start pm2-start.json`
 - Alternatively: Run `npm run cs` to build and then start.
 
-`npm run startmon` will launch the bot in monitor mode, i.e. it will reload anytime you save a file.
+`npm run startmon` will launch the bot in monitor mode, i.e. it will reload anytime you save a file (unfit for production environments).
 
 # Using the bot
 
@@ -82,7 +82,7 @@ To get help or view information about this bot.
 
 `>help` Shows a list of commands
 
-`>help` [command] Shows help for a specific command
+`>help [command]` Shows help for a specific command
 
 `>about` Information about this bot
 
