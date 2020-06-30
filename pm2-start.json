@@ -3,6 +3,7 @@
       "name": "emoji-stealer",
       "script": "build/index.js",
       "instances": "1",
+      "interpreter": "node@14.4.0",
       "watch": false,
       "args": [
           "--color"
