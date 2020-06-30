@@ -34,7 +34,7 @@ export default class BotClient extends AkairoClient {
     handleEdits: true,
     commandUtil: true,
     commandUtilLifetime: 3e5,
-    defaultCooldown: 6e4,
+    defaultCooldown: 6e3,
     argumentDefaults: {
       prompt: {
         modifyStart: (_: Message, str: string): string => `${str}\n\nType \`cancel\` to cancel this command...`,
@@ -46,6 +46,7 @@ export default class BotClient extends AkairoClient {
       },
       otherwise: ''
     },
+    ignoreCooldown: configFile.owners,
     ignorePermissions: configFile.owners
   })
 
@@ -98,12 +99,9 @@ export default class BotClient extends AkairoClient {
 
     //  Process handling
     process.once('SIGINT', () => {
-      this.logger.info(`[${this.user.username}] Process exit.`)
+      this.logger.warn(`[${this.user.username}] Received SIGINT => Quitting.`)
       this.destroy()
-    })
-    process.on('exit', () => {
-      this.logger.info(`[${this.user.username}] Process exit.`)
-      this.destroy()
+      process.exit(0)
     })
     process.on('uncaughtException', (err: Error) => {
       const errorMsg = (err ? err.stack || err : '').toString().replace(new RegExp(`${__dirname}/`, 'g'), './')
