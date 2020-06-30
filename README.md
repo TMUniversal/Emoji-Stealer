@@ -1,16 +1,42 @@
 # Emoji Stealer
+<div>
+	<p align="center">
+		<a href="https://github.com/TMUniversal/Emoji-Stealer/blob/stable/package.json#L3">
+			<img src="https://img.shields.io/badge/Emoji_Stealer-v0.1.2-c4c4c4.svg?style=flat" />
+		</a>
+		<a href="https://tmuniversal.eu/discord">
+			<img src="https://img.shields.io/discord/727551682090762280.svg?style=flat&logo=discord">
+		</a>
+		<a href="https://tmuniversal.eu/redirect/patreon">
+			<img src="https://img.shields.io/badge/Patreon-support_me-fa6956.svg?style=flat&logo=patreon" />
+		</a>
+		<br />
+		<a href="https://github.com/TMUniversal/Emoji-Stealer/actions">
+			<img src="https://github.com/TMUniversal/Emoji-Stealer/workflows/Test/badge.svg" />
+		</a>
+		<a href="https://github.com/TMUniversal/Emoji-Stealer/issues">
+			<img src="https://img.shields.io/github/issues/TMUniversal/Emoji-Stealer.svg?style=flat">
+		</a>
+		<a href="https://github.com/TMUniversal/Emoji-Stealer/graphs/contributors">
+			<img src="https://img.shields.io/github/contributors/TMUniversal/Emoji-Stealer.svg?style=flat">
+		</a>
+		<a href="https://github.com/TMUniversal/Emoji-Stealer/blob/stable/LICENSE.md">
+			<img src="https://img.shields.io/github/license/TMUniversal/Emoji-Stealer.svg?style=flat-square">
+		</a>
+	</p>
+</div>
 
-![Test](https://github.com/TMUniversal/Emoji-Stealer/workflows/Test/badge.svg)
+# Getting Started
 
-[Invite](https://discord.com/api/oauth2/authorize?client_id=726731461310545920&permissions=1074072576&scope=bot) the bot to your server.
+[Invite](https://discord.com/api/oauth2/authorize?client_id=726731461310545920&permissions=1074072576&scope=bot) the bot to your server, or host it yourself:
 
 ## Installation
 
-Assuming you have [npm](https://nodejs.org/en/download/current/) or [yarn](https://classic.yarnpkg.com/en/docs/install/) installed, run the respective installer:
+Assuming you have [Node.js](https://nodejs.org/en/download/current/) installed, install the required packages:
+> Please use the latest version on Node.js, as this project is constantly keeping up to date.
+> Emoji Stealer is built and tested with the latest version of Node.js
 
-- For npm: `npm install`
-
-- For yarn: `yarn`
+- In the project folder: `npm install`
 
 ## Setup
 
@@ -47,3 +73,7 @@ To start the bot, it must first be complied.
 # Credits
 
 Credits to [Hydractify](https://github.com/Hydractify/kanna_kobayashi) for their logging system.
+
+## License
+
+Emoji Stealer is released under the [MIT License](LICENSE.md).
