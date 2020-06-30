@@ -32,7 +32,7 @@ export class WebhookLogger extends Logger {
       .setColor(colors[level][2])
       .setFooter(this._processTag)
     const options: WebhookMessageOptions = {
-      avatarURL: 'https://cdn.discordapp.com/avatars/237993001828352001/a_04c3221e95f15ebcec7fbb96c6ec1146.gif?size=512',
+      avatarURL: 'https://cdn.discordapp.com/avatars/726731461310545920/8ff46c0a8bfaf5ba5853add8c1b95481.png?size=1024',
       embeds: [embed],
       username: 'Emoji Stealer Status'
     }
