@@ -25,18 +25,21 @@ export default class StealCommand extends Command {
   public async exec (message: Message): Promise<Message> {
     return message.util.send(MessageEmbed.common({ author: message.author })
       .setTitle('Emoji Stealer')
-      .setDescription('To "steal" emojis, react to this message with any custom emojis (may require Discord Nitro).\nI will upload emoji to this guild for the next 30 seconds.'))
+      .setDescription('**To \'steal\' emojis, react to this message with any custom emojis** *(may require Discord Nitro)*.\n\n' +
+        'I will give you 30 seconds to choose, then upload your chosen custom emojis to this guild.'))
       .then(async m => {
-        return m.awaitReactions(this.filter, { time: 30000 })
+        // Collect reactions
+        return m.awaitReactions(this.filter, { time: 35000 })
           .then(async collected => {
-            const emojis = collected.filter(emoji => emoji.users.cache.has(message.author.id))
-            if (emojis.size < 1) return message.util.reply('You\'re supposed to add reactions... Please try again...')
-            for (const [key, reaction] of emojis) {
+            const reactions = collected.filter(emoji => emoji.users.cache.has(message.author.id))
+            if (reactions.size < 1) return message.util.reply('You\'re supposed to add custom emojis... Please try again...')
+            for (const [, reaction] of reactions) {
               const response = await axios.get(reaction.emoji.url, { responseType: 'arraybuffer' })
               const image = Buffer.from(response.data, 'utf-8')
               message.guild.emojis.create(image, reaction.emoji.name, { reason: `Requested by: ${message.author.tag}` })
-              return message.util.reply('Emojis uploaded.')
+                .catch(() => message.channel.send('Could not upload emoji: ' + reaction.emoji.name))
             }
+            return message.util.reply('Emojis uploaded.')
           })
           .catch(() => { return message.util.reply('Something\'s not right, I can feel it.') })
       })
