@@ -105,6 +105,7 @@ export default class BotClient extends AkairoClient {
     process.on('exit', () => {
       this.logger.info(`[${this.user.username}] Process exit.`)
       this.destroy()
+      process.exit(0)
     })
     process.on('uncaughtException', (err: Error) => {
       const errorMsg = (err ? err.stack || err : '').toString().replace(new RegExp(`${__dirname}/`, 'g'), './')
