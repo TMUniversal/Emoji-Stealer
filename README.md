@@ -74,6 +74,6 @@ To start the bot, it must first be complied.
 
 Credits to [Hydractify](https://github.com/Hydractify/kanna_kobayashi) for their logging system.
 
-## License
+# License
 
 Emoji Stealer is released under the [MIT License](LICENSE.md).
