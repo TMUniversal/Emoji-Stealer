@@ -28,7 +28,9 @@
 
 # Getting Started
 
-[Invite](https://discord.com/api/oauth2/authorize?client_id=726731461310545920&permissions=1074072576&scope=bot) the bot to your server, or host it yourself:
+Emoji Stealer is a Discord Bot that allows it's users to copy custom emojis from other guilds. Without downloads.
+
+To use this bot: [invite](https://discord.com/api/oauth2/authorize?client_id=726731461310545920&permissions=1074072576&scope=bot) it to your server, or host it yourself.
 
 ## Installation
 
@@ -69,6 +71,28 @@ To start the bot, it must first be complied.
 - Alternatively: Run `npm run cs` to build and then start.
 
 `npm run startmon` will launch the bot in monitor mode, i.e. it will reload anytime you save a file.
+
+# Using the bot
+
+## Commands
+
+### Basic
+
+To get help or view information about this bot.
+
+`>help` Shows a list of commands
+
+`>help` [command] Shows help for a specific command
+
+`>about` Information about this bot
+
+`>invite` Generate an invite link, so you can invite this bot to your server
+
+### Copying Emojis
+
+`>steal` Will open up a menu that explains the process.
+
+To steal emojis, simply react to the message the bot sends with the custom emojis you want on your server.
 
 # Credits
 
