@@ -28,7 +28,7 @@
 
 # Getting Started
 
-Emoji Stealer is a Discord Bot that allows it's users to copy custom emojis from other guilds. Without downloads.
+[Emoji Stealer] is a Discord Bot that allows it's users to copy custom emojis from other guilds. Without downloads.
 
 To use this bot: [invite](https://discord.com/api/oauth2/authorize?client_id=726731461310545920&permissions=1074072576&scope=bot) it to your server, or host it yourself.
 
@@ -42,7 +42,7 @@ Assuming you have [Node.js](https://nodejs.org/en/download/current/) installed, 
 
 ## Setup
 
-- Make a copy of `data.example.json`, name it `data.json`.
+- Make a copy of [`data.example.json`], name it `data.json`.
 - Fill in the necessary values, remove the comment (since comments are not supported in JSON).
   - `owners` may be an array of strings
 
@@ -96,8 +96,21 @@ To steal emojis, simply react to the message the bot sends with the custom emoji
 
 # Credits
 
-Credits to [Hydractify](https://github.com/Hydractify/kanna_kobayashi) for their logging system.
+Credits to [Hydractify] for their logging system.
 
 # License
 
 Emoji Stealer is released under the [MIT License](LICENSE.md).
+
+
+<!-- Getting started -->
+
+[Emoji Stealer]: https://github.com/TMUniversal/Emoji-Stealer
+
+<!-- Setup -->
+
+[`data.example.json`]: https://github.com/TMUniversal/Emoji-Stealer/blob/master/data.example.json
+
+<!-- Credits -->
+
+[Hydractify]: https://github.com/Hydractify/kanna_kobayashi
