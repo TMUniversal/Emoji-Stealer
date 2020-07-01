@@ -94,21 +94,21 @@ export default class BotClient extends AkairoClient {
     this.setInterval(() => this.changeStatus(), 120000)
 
     // Error handling
-    this.on('error', e => this.logger.error(e.message))
-    this.on('warn', w => this.logger.warn(w))
+    this.on('error', e => this.logger.error('CLIENT', e.message))
+    this.on('warn', w => this.logger.warn('CLIENT', w))
 
     //  Process handling
     process.once('SIGINT', () => {
-      this.logger.warn(`[${this.user.username}] Received SIGINT => Quitting.`)
+      this.logger.warn('CLIENT', `[${this.user.username}] Received SIGINT => Quitting.`)
       this.destroy()
       process.exit(0)
     })
     process.on('uncaughtException', (err: Error) => {
       const errorMsg = (err ? err.stack || err : '').toString().replace(new RegExp(`${__dirname}/`, 'g'), './')
-      this.logger.error(errorMsg)
+      this.logger.error('EXCEPTION', errorMsg)
     })
     process.on('unhandledRejection', (err: Error) => {
-      this.logger.error('Uncaught Promise error: \n' + err.stack)
+      this.logger.error('REJECTION', 'Uncaught Promise error: \n' + err.stack)
     })
 
     return this
@@ -136,7 +136,7 @@ export default class BotClient extends AkairoClient {
   }
 
   public async updateBotStats (guilds: number, channels: number, users: number) {
-    if (!this.botstat) return Promise.resolve(this.logger.warn('Botstat API is disabled'))
+    if (!this.botstat) return Promise.resolve(this.logger.warn('API', 'Botstat API is disabled'))
     return this.botstat.patch('/botstat/' + this.user.id, {
       guilds: guilds,
       channels: channels,
@@ -144,6 +144,6 @@ export default class BotClient extends AkairoClient {
     })
       // eslint-disable-next-line no-console
       .then(() => console.info('Uploaded user base stats to API.'))
-      .catch(e => this.logger.error(e))
+      .catch(e => this.logger.error('API', e))
   }
 }

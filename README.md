@@ -2,7 +2,7 @@
 <div>
 	<p align="center">
 		<a href="https://github.com/TMUniversal/Emoji-Stealer/blob/stable/package.json#L3">
-			<img src="https://img.shields.io/badge/Emoji_Stealer-v0.1.2-c4c4c4.svg?style=flat" />
+			<img src="https://img.shields.io/badge/Emoji_Stealer-v0.1.3-c4c4c4.svg?style=flat" />
 		</a>
 		<a href="https://tmuniversal.eu/discord">
 			<img src="https://img.shields.io/discord/727551682090762280.svg?style=flat&logo=discord">
@@ -47,7 +47,7 @@ Assuming you have [Node.js](https://nodejs.org/en/download/current/) installed, 
   - `owners` may be an array of strings
 
 
-```JSON
+```JS
   {
     "clientToken": "<Discord Bot Token>",
     "webhook": {
