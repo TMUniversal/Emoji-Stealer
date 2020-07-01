@@ -4,7 +4,7 @@
 		<a href="https://github.com/TMUniversal/Emoji-Stealer/blob/stable/package.json#L3">
 			<img src="https://img.shields.io/badge/Emoji_Stealer-v0.1.3-c4c4c4.svg?style=flat" />
 		</a>
-		<a href="https://tmuniversal.eu/discord">
+		<a href="https://tmuniversal.eu/redirect/discord">
 			<img src="https://img.shields.io/discord/727551682090762280.svg?style=flat&logo=discord">
 		</a>
 		<a href="https://tmuniversal.eu/redirect/patreon">
