@@ -39,7 +39,7 @@ export default class PingCommand extends Command {
         inline: false
       },
       {
-        name: 'Emoji Stealer',
+        name: `[Emoji Stealer](https://discord.com/api/oauth2/authorize?client_id=${this.client.user.id}&permissions=1074072576&scope=bot)`,
         value: `Version: ${pkg.version}` +
               '\nWritten in TypeScript, powered by Node.js',
         inline: false
@@ -52,8 +52,8 @@ export default class PingCommand extends Command {
       },
       {
         name: 'Built With',
-        value: `[Discord.js ${pkg.dependencies['discord.js']}](https://github.com/discordjs/discord.js#readme)` +
-              `\n[Discord Akairo ${pkg.dependencies['discord-akairo']}](https://github.com/discord-akairo/discord-akairo#readme)`,
+        value: '[Discord.js](https://github.com/discordjs/discord.js#readme)' +
+              '\n[Discord Akairo](https://github.com/discord-akairo/discord-akairo#readme)',
         inline: true
       }],
       timestamp: new Date(),
