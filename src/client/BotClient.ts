@@ -99,7 +99,7 @@ export default class BotClient extends AkairoClient {
 
     //  Process handling
     process.once('SIGINT', () => {
-      this.logger.warn('EXIT', `[${this.user.username}] Received SIGINT => Quitting.`)
+      this.logger.warn('CLIENT', `[${this.user.username}] Received SIGINT => Quitting.`)
       this.destroy()
       process.exit(0)
     })
