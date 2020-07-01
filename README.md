@@ -47,7 +47,7 @@ Assuming you have [Node.js](https://nodejs.org/en/download/current/) installed, 
   - `owners` may be an array of strings
 
 
-```JSON
+```JS
   {
     "clientToken": "<Discord Bot Token>",
     "webhook": {
