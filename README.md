@@ -1,7 +1,7 @@
 # Emoji Stealer
 <div>
 	<p align="center">
-		<a href="https://github.com/TMUniversal/Emoji-Stealer/blob/stable/package.json#L3">
+		<a href="https://github.com/TMUniversal/Emoji-Stealer/blob/master/package.json#L3">
 			<img src="https://img.shields.io/badge/Emoji_Stealer-v0.1.3-c4c4c4.svg?style=flat" />
 		</a>
 		<a href="https://tmuniversal.eu/redirect/discord">
