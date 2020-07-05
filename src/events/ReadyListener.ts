@@ -15,7 +15,7 @@ export default class ReadyListener extends Listener {
   public exec (): void {
     const users = this.client.users.cache.size
     const channels = this.client.channels.cache.size
-    const guilds = this.client.channels.cache.size
+    const guilds = this.client.guilds.cache.size
     this.logger.info('CLIENT', `${this.client.user.tag} logged in with ${users} users, in ${channels} channels of ${guilds} guilds.`)
   }
 }
