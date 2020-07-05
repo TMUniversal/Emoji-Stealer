@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { Command } from 'discord-akairo'
 import { Message, MessageReaction, User, GuildEmoji } from 'discord.js'
 import axios from 'axios'
