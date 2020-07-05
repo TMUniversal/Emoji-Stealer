@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /**
  * @author Hydractify
  * @see https://github.com/Hydractify/kanna_kobayashi

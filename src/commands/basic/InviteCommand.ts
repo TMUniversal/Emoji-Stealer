@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { Command } from 'discord-akairo'
 import { Message } from 'discord.js'
 import { MessageEmbed } from '../../structures/MessageEmbed'

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { AkairoClient, CommandHandler, ListenerHandler } from 'discord-akairo'
 import { User, Message, ActivityType, ActivityOptions } from 'discord.js'
 import * as path from 'path'

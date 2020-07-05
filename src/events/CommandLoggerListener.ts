@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { Message } from 'discord.js'
 import { Listener, Command } from 'discord-akairo'
 import { WebhookLogger } from '../structures/WebhookLogger'

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { join } from 'path'
 import { Snowflake } from 'discord.js'
 const file = require(join('..', 'data.json'))
