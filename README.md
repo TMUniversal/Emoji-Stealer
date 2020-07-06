@@ -2,7 +2,7 @@
 <div>
 	<p align="center">
 		<a href="https://github.com/TMUniversal/Emoji-Stealer/blob/master/package.json#L3">
-			<img src="https://img.shields.io/badge/Emoji_Stealer-v0.1.3-c4c4c4.svg?style=flat" />
+			<img src="https://img.shields.io/github/package-json/v/TMUniversal/Emoji-Stealer?style=flat&color=c4c4c4" />
 		</a>
 		<a href="https://tmuniversal.eu/redirect/discord">
 			<img src="https://img.shields.io/discord/727551682090762280.svg?style=flat&logo=discord">
