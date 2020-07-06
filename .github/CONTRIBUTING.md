@@ -2,9 +2,9 @@
 
 ## Minimum requirements for contributing
 
-_You do not have to be a master on the following, but at least have general knowledge and understanding of the following concepts_
+_You do not have to be a master on the following, but at least have general knowledge and understanding of the following concepts:_
 
-- [discord.js]
+- [Discord.js]
 - [JavaScript]
 - [TypeScript]
 
@@ -15,6 +15,6 @@ _You do not have to be a master on the following, but at least have general know
 2. Check if your code works.
 3. Follow Discord's ToS and this repository's Code Of Conduct.
 
-[discord.js]: https://github.com/hydrabolt/discord.js
+[Discord.js]: https://github.com/hydrabolt/discord.js
 [javascript]: https://en.wikipedia.org/wiki/JavaScript
 [typescript]: https://www.typescriptlang.org/
