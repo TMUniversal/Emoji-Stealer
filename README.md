@@ -94,6 +94,8 @@ To get help or view information about this bot.
 
 To steal emojis, simply react to the message the bot sends with the custom emojis you want on your server.
 
+`>pfp [@user]` Will upload the profile picture of the mentioned user as an emoji _(mentioning a user is optional, if omitted this will upload your own profile picture)_
+
 # Credits
 
 Credits to [Hydractify] for their logging system.

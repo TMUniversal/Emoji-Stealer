@@ -4,6 +4,7 @@ import * as path from 'path'
 import axios, { AxiosInstance } from 'axios'
 import { WebhookLogger } from '../structures/WebhookLogger'
 import configFile from '../config'
+import appRootPath from 'app-root-path'
 
 declare module 'discord-akairo' {
   interface AkairoClient {
@@ -103,11 +104,12 @@ export default class BotClient extends AkairoClient {
       process.exit(0)
     })
     process.on('uncaughtException', (err: Error) => {
-      const errorMsg = (err ? err.stack || err : '').toString().replace(new RegExp(`${__dirname}/`, 'g'), './')
+      const errorMsg = (err ? err.stack || err : '').toString().replace(new RegExp(appRootPath.toString().replace(/\\/gmi, '\\\\').replace(/\//gmi, '\\/'), 'gmi'), '.')
       this.logger.error('EXCEPTION', errorMsg)
     })
     process.on('unhandledRejection', (err: Error) => {
-      this.logger.error('REJECTION', 'Uncaught Promise error: \n' + err.stack)
+      const errorMsg = (err ? err.stack || err : '').toString().replace(new RegExp(appRootPath.toString().replace(/\\/gmi, '\\\\').replace(/\//gmi, '\\/'), 'gmi'), '.')
+      this.logger.error('REJECTION', 'Uncaught Promise error: \n' + errorMsg)
     })
 
     return this
