@@ -13,8 +13,9 @@ export default class ProfilePictureCommand extends Command {
       category: 'emoji stealer',
       description: {
         content: 'Turn someone\'s profile picture into an emoji.',
-        usage: 'pfp @user',
+        usage: 'pfp [@user]',
         examples: [
+          'pfp',
           'pfp @Universal Studio™#0001',
           'pfp @your name here#1234'
         ]
