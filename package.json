@@ -35,7 +35,7 @@
     "@types/imagemin-gifsicle": "^5.2.0",
     "@types/imagemin-jpegtran": "^5.0.0",
     "@types/moment-duration-format": "^2.2.2",
-    "@types/node": "^14.0.19",
+    "@types/node": "^14.0.25",
     "@types/ws": "^7.2.6",
     "@typescript-eslint/eslint-plugin": "^2.12.0",
     "@typescript-eslint/parser": "^2.12.0",
