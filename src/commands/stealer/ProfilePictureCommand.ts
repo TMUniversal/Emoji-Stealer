@@ -16,7 +16,7 @@ export default class ProfilePictureCommand extends Command {
         usage: 'pfp [@user]',
         examples: [
           'pfp',
-          'pfp @Universal Studio™#0001',
+          'pfp @Emoji Stealer#2863',
           'pfp @your name here#1234'
         ]
       },
