@@ -5,11 +5,20 @@ import axios, { AxiosInstance } from 'axios'
 import { WebhookLogger } from '../structures/WebhookLogger'
 import configFile from '../config'
 import appRootPath from 'app-root-path'
+import CustomEventEmitter from '../structures/CustomEventEmitter'
 
 declare module 'discord-akairo' {
   interface AkairoClient {
     commandHandler: CommandHandler;
     listenerHandler: ListenerHandler;
+    config: BotOptions;
+    logger: WebhookLogger;
+    botstat?: AxiosInstance
+    customEmitter: CustomEventEmitter
+
+    start(): Promise<BotClient>;
+    changeStatus(): Promise<void>;
+    updateBotStats(guilds: number, channels: number, users: number): Promise<void>;
   }
 }
 
@@ -22,6 +31,7 @@ export default class BotClient extends AkairoClient {
   public config: BotOptions;
   public botstat?: AxiosInstance;
   public logger: WebhookLogger;
+  public eventEmitter: CustomEventEmitter;
 
   public listenerHandler: ListenerHandler = new ListenerHandler(this, {
     directory: path.join(__dirname, '..', 'events')
@@ -57,6 +67,7 @@ export default class BotClient extends AkairoClient {
 
     this.config = config
     this.logger = WebhookLogger.instance
+    this.eventEmitter = CustomEventEmitter.instance
 
     if (configFile.botstatToken && configFile.botstatToken?.length !== 0) {
       this.botstat = axios.create({
@@ -85,13 +96,14 @@ export default class BotClient extends AkairoClient {
     await this._init()
     await this.login(this.config.token)
 
-    const users = this.users.cache.size
-    const channels = this.channels.cache.size
-    const guilds = this.guilds.cache.size
+    this.eventEmitter.on('updateStats', (client: BotClient) => {
+      client.updateBotStats(client.guilds.cache.size, client.channels.cache.size, client.users.cache.size)
+    })
 
-    await this.updateBotStats(guilds, channels, users)
+    this.user.setActivity({ name: 'Starting up...', type: 'PLAYING' })
 
     this.setInterval(() => this.changeStatus(), 120000)
+    this.setInterval(() => this.eventEmitter.emit('updateStats', this), 10 * 60 * 1000)
 
     // Error handling
     this.on('error', e => this.logger.error('CLIENT', e.message))
@@ -144,7 +156,7 @@ export default class BotClient extends AkairoClient {
       users: users
     })
       // eslint-disable-next-line no-console
-      .then(() => console.info('Uploaded user base stats to API.'))
+      .then(() => console.info(`Uploaded user base stats to API: ${guilds} guilds, ${channels} channels, ${users} users.`))
       .catch(e => this.logger.error('API', e))
   }
 }
