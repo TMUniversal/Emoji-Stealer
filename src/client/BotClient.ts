@@ -1,4 +1,4 @@
-import { AkairoClient, CommandHandler, ListenerHandler } from 'discord-akairo'
+import { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler } from 'discord-akairo'
 import { User, Message, ActivityType, ActivityOptions } from 'discord.js'
 import * as path from 'path'
 import axios, { AxiosInstance } from 'axios'
@@ -11,6 +11,7 @@ declare module 'discord-akairo' {
   interface AkairoClient {
     commandHandler: CommandHandler;
     listenerHandler: ListenerHandler;
+    inhibitorHandler: InhibitorHandler;
     config: BotOptions;
     logger: WebhookLogger;
     botstat?: AxiosInstance
@@ -35,6 +36,10 @@ export default class BotClient extends AkairoClient {
 
   public listenerHandler: ListenerHandler = new ListenerHandler(this, {
     directory: path.join(__dirname, '..', 'events')
+  })
+
+  public inhibitorHandler: InhibitorHandler = new InhibitorHandler(this, {
+    directory: path.join(__dirname, '..', 'inhibitors')
   })
 
   public commandHandler: CommandHandler = new CommandHandler(this, {
@@ -80,12 +85,14 @@ export default class BotClient extends AkairoClient {
 
   private async _init (): Promise<void> {
     this.commandHandler.useListenerHandler(this.listenerHandler)
+    this.commandHandler.useInhibitorHandler(this.inhibitorHandler)
     this.listenerHandler.setEmitters({
       commandHandler: this.commandHandler,
       listenerHandler: this.listenerHandler,
       process
     })
 
+    this.inhibitorHandler.loadAll()
     this.commandHandler.loadAll()
     this.listenerHandler.loadAll()
   }

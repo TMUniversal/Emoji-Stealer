@@ -5,6 +5,7 @@
     "secret": ""
   },
   "botstatToken": "<Token>",
-	"prefix": ">",
-	"owners": ""
+  "prefix": ">",
+  "owners": "",
+  "userBlacklist": ["<some id>"]
 }

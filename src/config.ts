@@ -8,6 +8,7 @@ interface IConfigFile {
     botstatToken?: string;
     prefix: string;
     owners: Snowflake | Array<Snowflake>;
+    userBlacklist: Array<Snowflake>;
 }
 
 interface IWebhook {
