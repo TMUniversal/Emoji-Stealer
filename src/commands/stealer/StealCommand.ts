@@ -17,7 +17,8 @@ export default class StealCommand extends Command {
       },
       ratelimit: 3,
       typing: true,
-      userPermissions: ['MANAGE_EMOJIS']
+      userPermissions: ['MANAGE_EMOJIS'],
+      clientPermissions: ['MANAGE_EMOJIS']
     })
   }
 
@@ -38,7 +39,7 @@ export default class StealCommand extends Command {
               message.guild.emojis.create(image, reaction.emoji.name, { reason: `Requested by: ${message.author.tag}` })
                 .catch(() => message.channel.send('Could not upload emoji: ' + reaction.emoji.name))
             }
-            return message.util.reply('Emojis uploaded.')
+            return message.util.reply('done.')
           })
           .catch(() => { return message.util.reply('Something\'s not right, I can feel it.') })
       })
