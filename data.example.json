@@ -4,7 +4,7 @@
     "id": "",
     "secret": ""
   },
-  "botstatToken": "<Token>",
+  "weebToken": "<Token>",
   "prefix": ">",
   "owners": "",
   "userBlacklist": ["<some id>"]

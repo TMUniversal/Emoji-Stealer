@@ -54,7 +54,7 @@ Assuming you have [Node.js](https://nodejs.org/en/download/current/) installed, 
       "id": "",
       "secret": ""
     },
-    "botstatToken": "<Token>",  // Closed API. Request key (more info on website) or leave empty
+    "weebToken": "<Token>",  // Closed API. Request key (more info on website) or leave empty
     "prefix": ">",
     "owners": "<Your Discord ID>",
     // OR
