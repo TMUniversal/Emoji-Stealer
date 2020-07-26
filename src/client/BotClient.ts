@@ -112,6 +112,8 @@ export default class BotClient extends AkairoClient {
     this.setInterval(() => this.changeStatus(), 120000)
     this.setInterval(() => this.eventEmitter.emit('updateStats', this), 10 * 60 * 1000)
 
+    const pathRegex = new RegExp(appRootPath.toString().replace(/\\/gmi, '\\\\').replace(/\//gmi, '\\/'), 'gmi')
+
     // Error handling
     this.on('error', e => this.logger.error('CLIENT', e.message))
     this.on('warn', w => this.logger.warn('CLIENT', w))
@@ -123,11 +125,11 @@ export default class BotClient extends AkairoClient {
       process.exit(0)
     })
     process.on('uncaughtException', (err: Error) => {
-      const errorMsg = (err ? err.stack || err : '').toString().replace(new RegExp(appRootPath.toString().replace(/\\/gmi, '\\\\').replace(/\//gmi, '\\/'), 'gmi'), '.')
+      const errorMsg = (err ? err.stack || err : '').toString().replace(pathRegex, '.')
       this.logger.error('EXCEPTION', errorMsg)
     })
     process.on('unhandledRejection', (err: Error) => {
-      const errorMsg = (err ? err.stack || err : '').toString().replace(new RegExp(appRootPath.toString().replace(/\\/gmi, '\\\\').replace(/\//gmi, '\\/'), 'gmi'), '.')
+      const errorMsg = (err ? err.stack || err : '').toString().replace(pathRegex, '.')
       this.logger.error('REJECTION', 'Uncaught Promise error: \n' + errorMsg)
     })
 
