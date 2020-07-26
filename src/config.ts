@@ -5,9 +5,10 @@ const file = require(join('..', 'data.json'))
 interface IConfigFile {
     clientToken: string;
     webhook: IWebhook;
-    botstatToken?: string;
+    weebToken?: string;
     prefix: string;
     owners: Snowflake | Array<Snowflake>;
+    userBlacklist: Array<Snowflake>;
 }
 
 interface IWebhook {

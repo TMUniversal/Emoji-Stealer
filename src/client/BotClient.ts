@@ -1,5 +1,6 @@
-import { AkairoClient, CommandHandler, ListenerHandler } from 'discord-akairo'
+import { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler } from 'discord-akairo'
 import { User, Message, ActivityType, ActivityOptions } from 'discord.js'
+import WeebWrapper from '@tmuniversal/weeb-wrapper'
 import * as path from 'path'
 import axios, { AxiosInstance } from 'axios'
 import { WebhookLogger } from '../structures/WebhookLogger'
@@ -11,10 +12,12 @@ declare module 'discord-akairo' {
   interface AkairoClient {
     commandHandler: CommandHandler;
     listenerHandler: ListenerHandler;
+    inhibitorHandler: InhibitorHandler;
     config: BotOptions;
     logger: WebhookLogger;
-    botstat?: AxiosInstance
-    customEmitter: CustomEventEmitter
+    wrapper?: WeebWrapper;
+    botstat?: WeebWrapper['statistics'];
+    customEmitter: CustomEventEmitter;
 
     start(): Promise<BotClient>;
     changeStatus(): Promise<void>;
@@ -29,12 +32,17 @@ interface BotOptions {
 
 export default class BotClient extends AkairoClient {
   public config: BotOptions;
-  public botstat?: AxiosInstance;
+  public wrapper?: WeebWrapper;
+  public botstat?: WeebWrapper['statistics'];
   public logger: WebhookLogger;
   public eventEmitter: CustomEventEmitter;
 
   public listenerHandler: ListenerHandler = new ListenerHandler(this, {
     directory: path.join(__dirname, '..', 'events')
+  })
+
+  public inhibitorHandler: InhibitorHandler = new InhibitorHandler(this, {
+    directory: path.join(__dirname, '..', 'inhibitors')
   })
 
   public commandHandler: CommandHandler = new CommandHandler(this, {
@@ -69,23 +77,24 @@ export default class BotClient extends AkairoClient {
     this.logger = WebhookLogger.instance
     this.eventEmitter = CustomEventEmitter.instance
 
-    if (configFile.botstatToken && configFile.botstatToken?.length !== 0) {
-      this.botstat = axios.create({
-        baseURL: 'https://tmuniversal-api.herokuapp.com/api/v1',
-        timeout: 5000,
-        headers: { Authorization: `Bearer ${configFile.botstatToken}` }
-      })
-    } else this.botstat = undefined
+    if (configFile.weebToken && configFile.weebToken?.length !== 0) {
+      this.wrapper = new WeebWrapper(configFile.weebToken, 'https://api.tmuniversal.eu')
+      this.botstat = this.wrapper.statistics
+    } else {
+      this.wrapper = this.botstat = null
+    }
   }
 
   private async _init (): Promise<void> {
     this.commandHandler.useListenerHandler(this.listenerHandler)
+    this.commandHandler.useInhibitorHandler(this.inhibitorHandler)
     this.listenerHandler.setEmitters({
       commandHandler: this.commandHandler,
       listenerHandler: this.listenerHandler,
       process
     })
 
+    this.inhibitorHandler.loadAll()
     this.commandHandler.loadAll()
     this.listenerHandler.loadAll()
   }
@@ -99,11 +108,16 @@ export default class BotClient extends AkairoClient {
     this.eventEmitter.on('updateStats', (client: BotClient) => {
       client.updateBotStats(client.guilds.cache.size, client.channels.cache.size, client.users.cache.size)
     })
+    this.eventEmitter.on('logCommand', (command: string) => {
+      return this.logCommandToApi(command)
+    })
 
     this.user.setActivity({ name: 'Starting up...', type: 'PLAYING' })
 
     this.setInterval(() => this.changeStatus(), 120000)
     this.setInterval(() => this.eventEmitter.emit('updateStats', this), 10 * 60 * 1000)
+
+    const pathRegex = new RegExp(appRootPath.toString().replace(/\\/gmi, '\\\\').replace(/\//gmi, '\\/'), 'gmi')
 
     // Error handling
     this.on('error', e => this.logger.error('CLIENT', e.message))
@@ -116,11 +130,11 @@ export default class BotClient extends AkairoClient {
       process.exit(0)
     })
     process.on('uncaughtException', (err: Error) => {
-      const errorMsg = (err ? err.stack || err : '').toString().replace(new RegExp(appRootPath.toString().replace(/\\/gmi, '\\\\').replace(/\//gmi, '\\/'), 'gmi'), '.')
+      const errorMsg = (err ? err.stack || err : '').toString().replace(pathRegex, '.')
       this.logger.error('EXCEPTION', errorMsg)
     })
     process.on('unhandledRejection', (err: Error) => {
-      const errorMsg = (err ? err.stack || err : '').toString().replace(new RegExp(appRootPath.toString().replace(/\\/gmi, '\\\\').replace(/\//gmi, '\\/'), 'gmi'), '.')
+      const errorMsg = (err ? err.stack || err : '').toString().replace(pathRegex, '.')
       this.logger.error('REJECTION', 'Uncaught Promise error: \n' + errorMsg)
     })
 
@@ -149,14 +163,23 @@ export default class BotClient extends AkairoClient {
   }
 
   public async updateBotStats (guilds: number, channels: number, users: number) {
-    if (!this.botstat) return Promise.resolve(this.logger.warn('API', 'Botstat API is disabled'))
-    return this.botstat.patch('/botstat/' + this.user.id, {
-      guilds: guilds,
-      channels: channels,
-      users: users
-    })
-      // eslint-disable-next-line no-console
-      .then(() => console.info(`Uploaded user base stats to API: ${guilds} guilds, ${channels} channels, ${users} users.`))
-      .catch(e => this.logger.error('API', e))
+    if (!this.botstat) return Promise.resolve(this.logger.warn('API', 'Cannot upload bot stats: API is disabled'))
+    return this.botstat.updateBot(this.user.id, guilds, channels, users)
+      .then((r) => {
+        // eslint-disable-next-line no-console
+        return console.info(`Uploaded user base stats to API: ${r.guilds} guilds, ${r.channels} channels, ${r.users} users.`)
+      })
+      .catch(err => this.logger.error('API', err))
+  }
+
+  public async logCommandToApi (command: string) {
+    if (!this.botstat) return Promise.resolve(this.logger.warn('API', 'Cannot upload command stats: API is disabled'))
+    return this.botstat.increaseCommandUsage(this.user.id, command)
+      .then((result) => {
+        // eslint-disable-next-line no-console
+        // return console.info(`Command has been updated: ${result.command} was used ${result.uses} times.`)
+      }).catch((err) => {
+        return this.logger.error('API', err)
+      })
   }
 }
