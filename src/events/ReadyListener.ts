@@ -21,6 +21,7 @@ export default class ReadyListener extends Listener {
     const channels = this.client.channels.cache.size
     const guilds = this.client.guilds.cache.size
     this.logger.info('CLIENT', `${this.client.user.tag} logged in with ${users} users, in ${channels} channels of ${guilds} guilds.`)
+    this.eventEmitter.emit('changeStatus')
     this.eventEmitter.emit('updateStats', this.client)
   }
 }
