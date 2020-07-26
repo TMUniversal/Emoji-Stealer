@@ -111,10 +111,13 @@ export default class BotClient extends AkairoClient {
     this.eventEmitter.on('logCommand', (command: string) => {
       return this.logCommandToApi(command)
     })
+    this.eventEmitter.on('changeStatus', () => {
+      return this.changeStatus()
+    })
 
     this.user.setActivity({ name: 'Starting up...', type: 'PLAYING' })
 
-    this.setInterval(() => this.changeStatus(), 120000)
+    this.setInterval(() => this.eventEmitter.emit('changeStatus'), 120000)
     this.setInterval(() => this.eventEmitter.emit('updateStats', this), 10 * 60 * 1000)
 
     const pathRegex = new RegExp(appRootPath.toString().replace(/\\/gmi, '\\\\').replace(/\//gmi, '\\/'), 'gmi')
