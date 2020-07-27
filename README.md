@@ -40,6 +40,9 @@ Assuming you have [Node.js](https://nodejs.org/en/download/current/) installed, 
 
 - In the project folder: `npm install`
 
+##### Potential issues during installation
+On linux you may need additional dependencies for the image compression packages imagemin and addons. Not individually installing the [`imagemin`] packages has lead to errors on Ubuntu, see this [issue](https://github.com/TMUniversal/Emoji-Stealer/issues/31#issuecomment-664607038).
+
 ## Setup
 
 - Make a copy of [`data.example.json`], name it `data.json`.
@@ -58,7 +61,8 @@ Assuming you have [Node.js](https://nodejs.org/en/download/current/) installed, 
     "prefix": ">",
     "owners": "<Your Discord ID>",
     // OR
-    "owners": ["<Your Discord ID>", "<Another Discord ID>"]
+		"owners": ["<Your Discord ID>", "<Another Discord ID>"],
+		"userBlacklist": ["<some id>"] // users that cannot use commands
   }
 ```
 
@@ -108,6 +112,10 @@ Emoji Stealer is released under the [MIT License](LICENSE.md).
 <!-- Getting started -->
 
 [Emoji Stealer]: https://github.com/TMUniversal/Emoji-Stealer
+
+<!-- Installation -->
+
+[`imagemin`]: https://www.npmjs.com/package/imagemin
 
 <!-- Setup -->
 

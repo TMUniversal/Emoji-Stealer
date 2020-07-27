@@ -5,8 +5,10 @@
     "Jpegtran",
     "Loggable",
     "addbot",
+    "automake",
     "ayanaware",
     "botstat",
+    "gifsicle",
     "printf",
     "ratelimit",
     "startmon"
