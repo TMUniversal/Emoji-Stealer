@@ -1,5 +1,5 @@
 import { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler } from 'discord-akairo'
-import { User, Message, ActivityType, ActivityOptions } from 'discord.js'
+import { User, Message, ActivityType, ActivityOptions, Presence } from 'discord.js'
 import WeebWrapper from '@tmuniversal/weeb-wrapper'
 import * as path from 'path'
 import axios, { AxiosInstance } from 'axios'
@@ -20,7 +20,7 @@ declare module 'discord-akairo' {
     customEmitter: CustomEventEmitter;
 
     start(): Promise<BotClient>;
-    changeStatus(): Promise<void>;
+    changeStatus(): Promise<Presence>;
     updateBotStats(guilds: number, channels: number, users: number): Promise<void>;
   }
 }
@@ -166,7 +166,7 @@ export default class BotClient extends AkairoClient {
     const chooseStatus = options || statuses[~~(Math.random() * statuses.length)]
     const details: ActivityOptions = { type: chooseStatus.type || 'PLAYING' as ActivityType }
     if (chooseStatus.url) details.url = chooseStatus.url
-    this.user.setActivity(chooseStatus.name, details)
+    return this.user.setActivity(chooseStatus.name, details)
   }
 
   // Upload user stats to api
