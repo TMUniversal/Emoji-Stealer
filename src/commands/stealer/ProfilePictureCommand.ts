@@ -36,7 +36,11 @@ export default class ProfilePictureCommand extends Command {
 
     message.util.send({ content: 'Uploading the following image as an emoji:', files: [new MessageAttachment(image)] })
 
-    return message.guild.emojis.create(image, targetUser.username.replace(/[^a-zA-Z0-9]/gi, ''), { reason: `Requested by: ${message.author.tag}` })
+    let emojiName = targetUser.username.replace(/[^a-zA-Z0-9]/gi, '')
+
+    if (!emojiName || emojiName.length === 0) emojiName = 'invalid_name'
+
+    return message.guild.emojis.create(image, emojiName, { reason: `Requested by: ${message.author.tag}` })
       .catch((e) => {
         this.logger.error('PFP UPLOAD', e)
         return message.channel.send('Could not upload!')

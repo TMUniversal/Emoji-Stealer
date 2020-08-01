@@ -1,5 +1,5 @@
 import { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler } from 'discord-akairo'
-import { User, Message, ActivityType, ActivityOptions } from 'discord.js'
+import { User, Message, ActivityType, ActivityOptions, Presence } from 'discord.js'
 import WeebWrapper from '@tmuniversal/weeb-wrapper'
 import * as path from 'path'
 import axios, { AxiosInstance } from 'axios'
@@ -20,7 +20,7 @@ declare module 'discord-akairo' {
     customEmitter: CustomEventEmitter;
 
     start(): Promise<BotClient>;
-    changeStatus(): Promise<void>;
+    changeStatus(): Promise<Presence>;
     updateBotStats(guilds: number, channels: number, users: number): Promise<void>;
   }
 }
@@ -115,18 +115,21 @@ export default class BotClient extends AkairoClient {
       return this.changeStatus()
     })
 
+    // Set a startup notice. This will be overridden upon ready.
     this.user.setActivity({ name: 'Starting up...', type: 'PLAYING' })
 
-    this.setInterval(() => this.eventEmitter.emit('changeStatus'), 120000)
-    this.setInterval(() => this.eventEmitter.emit('updateStats', this), 10 * 60 * 1000)
+    // Automate status changes and upload stat uploads.
+    this.setInterval(() => this.eventEmitter.emit('changeStatus'), 120000) // every two minutes
+    this.setInterval(() => this.eventEmitter.emit('updateStats', this), 10 * 60 * 1000) // every ten minutes
 
+    // Regex to match the root path of the project. Escapes path separators on windows and linux
     const pathRegex = new RegExp(appRootPath.toString().replace(/\\/gmi, '\\\\').replace(/\//gmi, '\\/'), 'gmi')
 
     // Error handling
     this.on('error', e => this.logger.error('CLIENT', e.message))
     this.on('warn', w => this.logger.warn('CLIENT', w))
 
-    //  Process handling
+    //  Process handling / do not crash on error
     process.once('SIGINT', () => {
       this.logger.warn('CLIENT', `[${this.user.username}] Received SIGINT => Quitting.`)
       this.destroy()
@@ -144,6 +147,7 @@ export default class BotClient extends AkairoClient {
     return this
   }
 
+  // Function for (randomized) status changes
   public async changeStatus (options?: ActivityOptions) {
     const users = this.users.cache.size
     const channels = this.channels.cache.size
@@ -162,25 +166,27 @@ export default class BotClient extends AkairoClient {
     const chooseStatus = options || statuses[~~(Math.random() * statuses.length)]
     const details: ActivityOptions = { type: chooseStatus.type || 'PLAYING' as ActivityType }
     if (chooseStatus.url) details.url = chooseStatus.url
-    this.user.setActivity(chooseStatus.name, details)
+    return this.user.setActivity(chooseStatus.name, details)
   }
 
+  // Upload user stats to api
   public async updateBotStats (guilds: number, channels: number, users: number) {
     if (!this.botstat) return Promise.resolve(this.logger.warn('API', 'Cannot upload bot stats: API is disabled'))
     return this.botstat.updateBot(this.user.id, guilds, channels, users)
       .then((r) => {
         // eslint-disable-next-line no-console
-        return console.info(`Uploaded user base stats to API: ${r.guilds} guilds, ${r.channels} channels, ${r.users} users.`)
+        return console.debug(`Uploaded user base stats to API: ${r.guilds} guilds, ${r.channels} channels, ${r.users} users.`)
       })
       .catch(err => this.logger.error('API', err))
   }
 
+  // Upload command usage stats to api
   public async logCommandToApi (command: string) {
     if (!this.botstat) return Promise.resolve(this.logger.warn('API', 'Cannot upload command stats: API is disabled'))
     return this.botstat.increaseCommandUsage(this.user.id, command)
       .then((result) => {
         // eslint-disable-next-line no-console
-        // return console.info(`Command has been updated: ${result.command} was used ${result.uses} times.`)
+        // return console.debug(`Command has been updated: ${result.command} was used ${result.uses} times.`)
       }).catch((err) => {
         return this.logger.error('API', err)
       })
