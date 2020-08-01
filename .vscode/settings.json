@@ -8,9 +8,11 @@
     "automake",
     "ayanaware",
     "botstat",
+    "gifs",
     "gifsicle",
     "printf",
     "ratelimit",
-    "startmon"
+    "startmon",
+    "stealprofile"
   ]
 }
