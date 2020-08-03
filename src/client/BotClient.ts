@@ -113,7 +113,7 @@ export default class BotClient extends AkairoClient {
     await this.login(this.config.token)
 
     this.eventEmitter.on('updateStats', (client: BotClient) => {
-      client.updateBotStats(client.guilds.cache.size, client.channels.cache.size, client.users.cache.size)
+      if (client.botstat) client.updateBotStats(client.guilds.cache.size, client.channels.cache.size, client.users.cache.size)
       if (client.dbl) client.dbl.postStats(client.guilds.cache.size)
     })
     this.eventEmitter.on('logCommand', (command: string) => {
@@ -127,8 +127,8 @@ export default class BotClient extends AkairoClient {
     this.user.setActivity({ name: 'Starting up...', type: 'PLAYING' })
 
     // Automate status changes and upload stat uploads.
-    this.setInterval(() => this.eventEmitter.emit('changeStatus'), 120000) // every two minutes
-    this.setInterval(() => this.eventEmitter.emit('updateStats', this), 10 * 60 * 1000) // every ten minutes
+    this.setInterval(() => this.eventEmitter.emit('changeStatus'), 5 * 60 * 1000) // every five minutes
+    this.setInterval(() => this.eventEmitter.emit('updateStats', this), 20 * 60 * 1000) // every twenty minutes
 
     // Regex to match the root path of the project. Escapes path separators on windows and linux
     const pathRegex = new RegExp(appRootPath.toString().replace(/\\/gmi, '\\\\').replace(/\//gmi, '\\/'), 'gmi')
