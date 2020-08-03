@@ -114,7 +114,7 @@ export default class BotClient extends AkairoClient {
 
     this.eventEmitter.on('updateStats', (client: BotClient) => {
       client.updateBotStats(client.guilds.cache.size, client.channels.cache.size, client.users.cache.size)
-      client.dbl.postStats(client.guilds.cache.size)
+      if (client.dbl) client.dbl.postStats(client.guilds.cache.size)
     })
     this.eventEmitter.on('logCommand', (command: string) => {
       return this.logCommandToApi(command)
