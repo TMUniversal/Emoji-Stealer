@@ -19,6 +19,6 @@ export default class CommandLoggerListener extends Listener {
   public exec (message: Message, command: Command, args?: any): Promise<void> {
     const isPrivate: boolean = !(message.guild)
     this.eventEmitter.emit('logCommand', command.id)
-    return this.logger.info('Command Issued', `${message.author.tag}: ${isPrivate ? '(in DMs)' : `${message.guild.name}`} > ${command.id}`)
+    return this.logger.info('Command Issued', `in ${isPrivate ? 'DMs' : 'a guild'} > ${command.id}`)
   }
 }
