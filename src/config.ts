@@ -6,6 +6,7 @@ interface IConfigFile {
     clientToken: string;
     webhook: IWebhook;
     weebToken?: string;
+    dblToken?: string;
     prefix: string;
     owners: Snowflake | Array<Snowflake>;
     userBlacklist: Array<Snowflake>;

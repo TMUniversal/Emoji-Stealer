@@ -3,6 +3,7 @@ import { User, Message, ActivityType, ActivityOptions, Presence } from 'discord.
 import WeebWrapper from '@tmuniversal/weeb-wrapper'
 import * as path from 'path'
 import axios, { AxiosInstance } from 'axios'
+import DBL from 'dblapi.js'
 import { WebhookLogger } from '../structures/WebhookLogger'
 import configFile from '../config'
 import appRootPath from 'app-root-path'
@@ -17,6 +18,7 @@ declare module 'discord-akairo' {
     logger: WebhookLogger;
     wrapper?: WeebWrapper;
     botstat?: WeebWrapper['statistics'];
+    dbl?: DBL
     customEmitter: CustomEventEmitter;
 
     start(): Promise<BotClient>;
@@ -34,6 +36,7 @@ export default class BotClient extends AkairoClient {
   public config: BotOptions;
   public wrapper?: WeebWrapper;
   public botstat?: WeebWrapper['statistics'];
+  public dbl?: DBL
   public logger: WebhookLogger;
   public eventEmitter: CustomEventEmitter;
 
@@ -83,6 +86,10 @@ export default class BotClient extends AkairoClient {
     } else {
       this.wrapper = this.botstat = null
     }
+
+    if (configFile.dblToken && configFile.dblToken.length !== 0) {
+      this.dbl = new DBL(configFile.dblToken)
+    }
   }
 
   private async _init (): Promise<void> {
@@ -107,6 +114,7 @@ export default class BotClient extends AkairoClient {
 
     this.eventEmitter.on('updateStats', (client: BotClient) => {
       client.updateBotStats(client.guilds.cache.size, client.channels.cache.size, client.users.cache.size)
+      client.dbl.postStats(client.guilds.cache.size)
     })
     this.eventEmitter.on('logCommand', (command: string) => {
       return this.logCommandToApi(command)

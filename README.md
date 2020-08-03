@@ -4,6 +4,12 @@
     <a href="https://github.com/TMUniversal/Emoji-Stealer/blob/master/package.json#L3">
       <img src="https://img.shields.io/github/package-json/v/TMUniversal/Emoji-Stealer?style=flat&color=c4c4c4" />
     </a>
+    <a href="https://top.gg/bot/726731461310545920" >
+      <img src="https://top.gg/api/widget/status/726731461310545920.svg?noavatar=true" alt="Emoji Stealer" />
+    </a>
+    <a href="https://top.gg/bot/726731461310545920" >
+      <img src="https://top.gg/api/widget/servers/726731461310545920.svg?noavatar=true" alt="Emoji Stealer" />
+    </a>
     <a href="https://tmuniversal.eu/redirect/discord">
       <img src="https://img.shields.io/discord/727551682090762280.svg?style=flat&logo=discord">
     </a>
@@ -58,6 +64,7 @@ On linux you may need additional dependencies for the image compression packages
       "secret": ""
     },
     "weebToken": "<Token>",  // Closed API. Request key (more info on website) or leave empty
+    "dblToken": "<Another token>", // Your top.gg api key. Used to upload stats.
     "prefix": ">",
     "owners": "<Your Discord ID>",
     // OR

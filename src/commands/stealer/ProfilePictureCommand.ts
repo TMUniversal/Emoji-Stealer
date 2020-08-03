@@ -43,7 +43,7 @@ export default class ProfilePictureCommand extends Command {
     return message.guild.emojis.create(image, emojiName, { reason: `Requested by: ${message.author.tag}` })
       .catch((e) => {
         this.logger.error('PFP UPLOAD', e)
-        return message.channel.send('Could not upload!')
+        return message.channel.send('Could not upload!') // TODO: report what went wrong in more detail.
       })
   }
 }
