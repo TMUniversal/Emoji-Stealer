@@ -1,29 +1,29 @@
 # Emoji Stealer
 <div>
-	<p align="center">
-		<a href="https://github.com/TMUniversal/Emoji-Stealer/blob/master/package.json#L3">
-			<img src="https://img.shields.io/github/package-json/v/TMUniversal/Emoji-Stealer?style=flat&color=c4c4c4" />
-		</a>
-		<a href="https://tmuniversal.eu/redirect/discord">
-			<img src="https://img.shields.io/discord/727551682090762280.svg?style=flat&logo=discord">
-		</a>
-		<a href="https://tmuniversal.eu/redirect/patreon">
-			<img src="https://img.shields.io/badge/Patreon-support_me-fa6956.svg?style=flat&logo=patreon" />
-		</a>
-		<br />
-		<a href="https://github.com/TMUniversal/Emoji-Stealer/actions">
-			<img src="https://github.com/TMUniversal/Emoji-Stealer/workflows/Test/badge.svg" />
-		</a>
-		<a href="https://github.com/TMUniversal/Emoji-Stealer/issues">
-			<img src="https://img.shields.io/github/issues/TMUniversal/Emoji-Stealer.svg?style=flat">
-		</a>
-		<a href="https://github.com/TMUniversal/Emoji-Stealer/graphs/contributors">
-			<img src="https://img.shields.io/github/contributors/TMUniversal/Emoji-Stealer.svg?style=flat">
-		</a>
-		<a href="https://github.com/TMUniversal/Emoji-Stealer/blob/stable/LICENSE.md">
-			<img src="https://img.shields.io/github/license/TMUniversal/Emoji-Stealer.svg?style=flat">
-		</a>
-	</p>
+  <p align="center">
+    <a href="https://github.com/TMUniversal/Emoji-Stealer/blob/master/package.json#L3">
+      <img src="https://img.shields.io/github/package-json/v/TMUniversal/Emoji-Stealer?style=flat&color=c4c4c4" />
+    </a>
+    <a href="https://tmuniversal.eu/redirect/discord">
+      <img src="https://img.shields.io/discord/727551682090762280.svg?style=flat&logo=discord">
+    </a>
+    <a href="https://tmuniversal.eu/redirect/patreon">
+      <img src="https://img.shields.io/badge/Patreon-support_me-fa6956.svg?style=flat&logo=patreon" />
+    </a>
+    <br />
+    <a href="https://github.com/TMUniversal/Emoji-Stealer/actions">
+      <img src="https://github.com/TMUniversal/Emoji-Stealer/workflows/Test/badge.svg" />
+    </a>
+    <a href="https://github.com/TMUniversal/Emoji-Stealer/issues">
+      <img src="https://img.shields.io/github/issues/TMUniversal/Emoji-Stealer.svg?style=flat">
+    </a>
+    <a href="https://github.com/TMUniversal/Emoji-Stealer/graphs/contributors">
+      <img src="https://img.shields.io/github/contributors/TMUniversal/Emoji-Stealer.svg?style=flat">
+    </a>
+    <a href="https://github.com/TMUniversal/Emoji-Stealer/blob/stable/LICENSE.md">
+      <img src="https://img.shields.io/github/license/TMUniversal/Emoji-Stealer.svg?style=flat">
+    </a>
+  </p>
 </div>
 
 # Getting Started
@@ -61,8 +61,8 @@ On linux you may need additional dependencies for the image compression packages
     "prefix": ">",
     "owners": "<Your Discord ID>",
     // OR
-		"owners": ["<Your Discord ID>", "<Another Discord ID>"],
-		"userBlacklist": ["<some id>"] // users that cannot use commands
+    "owners": ["<Your Discord ID>", "<Another Discord ID>"],
+    "userBlacklist": ["<some id>"] // users that cannot use commands
   }
 ```
 
@@ -97,6 +97,20 @@ To get help or view information about this bot.
 `>steal` Will open up a menu that explains the process.
 
 To steal emojis, simply react to the message the bot sends with the custom emojis you want on your server.
+
+<details>
+
+<summary>Image guide. (click to open)</summary>
+
+<img src="https://i.imgur.com/fs8jicD.png" />
+
+<img src="https://i.imgur.com/fh4ZGeZ.png?1" />
+
+<img src="https://i.imgur.com/kGpbUe4.png" />
+
+<img src="https://i.imgur.com/IZTFiIA.png" />
+
+</details>
 
 `>pfp [@user]` Will upload the profile picture of the mentioned user as an emoji _(mentioning a user is optional, if omitted this will upload your own profile picture)_
 
