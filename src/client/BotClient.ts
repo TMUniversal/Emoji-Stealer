@@ -8,6 +8,8 @@ import { WebhookLogger } from '../structures/WebhookLogger'
 import configFile from '../config'
 import appRootPath from 'app-root-path'
 import CustomEventEmitter from '../structures/CustomEventEmitter'
+import VariableParser from '../util/VariableParser'
+import StatusUpdater from '../structures/StatusUpdater'
 
 declare module 'discord-akairo' {
   interface AkairoClient {
@@ -18,7 +20,9 @@ declare module 'discord-akairo' {
     logger: WebhookLogger;
     wrapper?: WeebWrapper;
     botstat?: WeebWrapper['statistics'];
-    dbl?: DBL
+    dbl?: DBL;
+    variableParser: VariableParser;
+    statusUpdater: StatusUpdater;
     customEmitter: CustomEventEmitter;
 
     start(): Promise<BotClient>;
@@ -36,7 +40,9 @@ export default class BotClient extends AkairoClient {
   public config: BotOptions;
   public wrapper?: WeebWrapper;
   public botstat?: WeebWrapper['statistics'];
-  public dbl?: DBL
+  public dbl?: DBL;
+  public statusUpdater: StatusUpdater;
+  public variableParser: VariableParser;
   public logger: WebhookLogger;
   public eventEmitter: CustomEventEmitter;
 
@@ -79,6 +85,8 @@ export default class BotClient extends AkairoClient {
     this.config = config
     this.logger = WebhookLogger.instance
     this.eventEmitter = CustomEventEmitter.instance
+    this.variableParser = new VariableParser({ website: 'tmuniversal.eu', prefix: configFile.prefix })
+    this.statusUpdater = new StatusUpdater(this, this.variableParser, 'https://pastebin.com/raw/UDWZ0eZZ')
 
     if (configFile.weebToken && configFile.weebToken?.length !== 0) {
       this.wrapper = new WeebWrapper(configFile.weebToken, 'https://api.tmuniversal.eu')
@@ -135,6 +143,7 @@ export default class BotClient extends AkairoClient {
     await this._init()
     await this.login(this.config.token)
 
+    // Register event handling for custom events
     this.eventEmitter.on('updateStats', (client: BotClient) => {
       if (client.botstat) client.updateBotStats(client.guilds.cache.size, client.channels.cache.size, client.users.cache.size)
       if (client.dbl) client.dbl.postStats(client.guilds.cache.size)
@@ -157,25 +166,8 @@ export default class BotClient extends AkairoClient {
   }
 
   // Function for (randomized) status changes
-  public async changeStatus (options?: ActivityOptions) {
-    const users = this.users.cache.size
-    const channels = this.channels.cache.size
-    const guilds = this.guilds.cache.size
-
-    const statuses: Array<ActivityOptions> = [
-      { type: 'PLAYING', name: `with ${users} users` },
-      { type: 'LISTENING', name: `${users} users` },
-      { type: 'WATCHING', name: `over ${users} users` },
-      { type: 'PLAYING', name: `in ${guilds} servers` },
-      { type: 'WATCHING', name: 'tmuniversal.eu' },
-      { type: 'PLAYING', name: `${configFile.prefix}help for help` },
-      { type: 'WATCHING', name: `${guilds} servers` }
-    ]
-
-    const chooseStatus = options || statuses[~~(Math.random() * statuses.length)]
-    const details: ActivityOptions = { type: chooseStatus.type || 'PLAYING' as ActivityType }
-    if (chooseStatus.url) details.url = chooseStatus.url
-    return this.user.setActivity(chooseStatus.name, details)
+  public async changeStatus (options?: ActivityOptions): Promise<Presence> {
+    return this.statusUpdater.updateStatus()
   }
 
   // Upload user stats to api
