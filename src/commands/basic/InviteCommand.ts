@@ -19,6 +19,6 @@ export default class InviteCommand extends Command {
   }
 
   public exec (message: Message): Promise<Message> {
-    return message.util.send(MessageEmbed.common({ author: message.member.user }).setDescription(`[Add me to your server](https://discord.com/api/oauth2/authorize?client_id=${this.client.user.id}&permissions=1074072576&scope=bot)`))
+    return message.util.send(new MessageEmbed().setDescription(`[**Click here to add me to your server**](https://discord.com/api/oauth2/authorize?client_id=${this.client.user.id}&permissions=1074072576&scope=bot)`).setFooter(this.client.user.username, this.client.user.avatarURL({ dynamic: true })))
   }
 }
