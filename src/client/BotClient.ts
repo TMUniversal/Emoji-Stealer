@@ -51,10 +51,10 @@ export default class BotClient extends AkairoClient {
   public commandHandler: CommandHandler = new CommandHandler(this, {
     directory: path.join(__dirname, '..', 'commands'),
     prefix: configFile.prefix,
-    allowMention: false,
+    allowMention: true,
     handleEdits: true,
     commandUtil: true,
-    commandUtilLifetime: 3e5,
+    commandUtilLifetime: 2 * 60 * 1000,
     defaultCooldown: 6e3,
     argumentDefaults: {
       prompt: {
@@ -101,9 +101,32 @@ export default class BotClient extends AkairoClient {
       process
     })
 
+    // Load handler sub-modules
     this.inhibitorHandler.loadAll()
     this.commandHandler.loadAll()
     this.listenerHandler.loadAll()
+
+    // Error handlers
+    // Regex to match the root path of the project. Escapes path separators on windows and linux
+    const pathRegex = new RegExp(path.normalize(appRootPath.toString()).replace(/\\/g, '\\\\').replace(/\//g, '\\/'), 'gmi')
+
+    this.on('error', e => this.logger.error('CLIENT', e.message))
+    this.on('warn', w => this.logger.warn('CLIENT', w))
+
+    //  Process handling / do not crash on error
+    process.once('SIGINT', () => {
+      this.logger.warn('PROCESS', 'Received SIGINT => Quitting.')
+      this.destroy()
+      process.exit(0)
+    })
+    process.on('uncaughtException', (err: Error) => {
+      const errorMsg = (err ? err.stack || err : '').toString().replace(pathRegex, '.')
+      this.logger.error('EXCEPTION', errorMsg)
+    })
+    process.on('unhandledRejection', (err: Error) => {
+      const errorMsg = (err ? err.stack || err : '').toString().replace(pathRegex, '.')
+      this.logger.error('REJECTION', 'Uncaught Promise error: \n' + errorMsg)
+    })
   }
 
   public async start (): Promise<BotClient> {
@@ -129,28 +152,6 @@ export default class BotClient extends AkairoClient {
     // Automate status changes and upload stat uploads.
     this.setInterval(() => this.eventEmitter.emit('changeStatus'), 5 * 60 * 1000) // every five minutes
     this.setInterval(() => this.eventEmitter.emit('updateStats', this), 20 * 60 * 1000) // every twenty minutes
-
-    // Regex to match the root path of the project. Escapes path separators on windows and linux
-    const pathRegex = new RegExp(appRootPath.toString().replace(/\\/gmi, '\\\\').replace(/\//gmi, '\\/'), 'gmi')
-
-    // Error handling
-    this.on('error', e => this.logger.error('CLIENT', e.message))
-    this.on('warn', w => this.logger.warn('CLIENT', w))
-
-    //  Process handling / do not crash on error
-    process.once('SIGINT', () => {
-      this.logger.warn('CLIENT', `[${this.user.username}] Received SIGINT => Quitting.`)
-      this.destroy()
-      process.exit(0)
-    })
-    process.on('uncaughtException', (err: Error) => {
-      const errorMsg = (err ? err.stack || err : '').toString().replace(pathRegex, '.')
-      this.logger.error('EXCEPTION', errorMsg)
-    })
-    process.on('unhandledRejection', (err: Error) => {
-      const errorMsg = (err ? err.stack || err : '').toString().replace(pathRegex, '.')
-      this.logger.error('REJECTION', 'Uncaught Promise error: \n' + errorMsg)
-    })
 
     return this
   }
