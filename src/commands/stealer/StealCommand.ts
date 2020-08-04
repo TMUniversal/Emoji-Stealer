@@ -25,7 +25,7 @@ export default class StealCommand extends Command {
   public async exec (message: Message): Promise<Message | void> {
     return message.util.send(MessageEmbed.common({ author: message.author })
       .setTitle('Emoji Stealer')
-      .setDescription('**To \'steal\' emojis, react to this message with any custom emojis** (this requires Discord Nitro).\n\n' +
+      .setDescription('**To *steal* emojis, react to this message with any custom emojis** (this requires Discord Nitro).\n\n' +
           'I will give you 30 seconds to choose, then upload your chosen custom emojis to this guild.'))
       .then(async m => {
         // Collect reactions
