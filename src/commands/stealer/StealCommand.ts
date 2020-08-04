@@ -23,19 +23,6 @@ export default class StealCommand extends Command {
   }
 
   public async exec (message: Message): Promise<Message | void> {
-    // // eslint-disable-next-line no-useless-escape
-    // const emojiRegex = /<:[\w !"#$%&'()*+,-./;<=>?@[\\\]\^_`\{\|\}~]{1,32}:\d{16,32}>/gmiu
-    // if (emojiRegex.test(message.content)) {
-    //   message.cleanContent.match(emojiRegex).forEach(match => {
-    //     const details = {
-    //       name: match.split(':')[1],
-    //       id: match.split(':')[2].replace(/[<>]/g, ''),
-    //       combined: match.replace(/[<>]/gi, '')
-    //     }
-    //     const emoji = this.client.emojis.resolve(details.id)
-    //     console.log('emoji detected: ' + emoji)
-    //   })
-    // } else {
     return message.util.send(MessageEmbed.common({ author: message.author })
       .setTitle('Emoji Stealer')
       .setDescription('**To \'steal\' emojis, react to this message with any custom emojis** (this requires Discord Nitro).\n\n' +
@@ -56,7 +43,6 @@ export default class StealCommand extends Command {
           })
           .catch(() => { return message.util.reply('Something\'s not right, I can feel it.') })
       })
-    // }
   }
 
   private filter (reaction: MessageReaction, user: User): boolean {
