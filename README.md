@@ -20,6 +20,9 @@
     <a href="https://github.com/TMUniversal/Emoji-Stealer/actions">
       <img src="https://github.com/TMUniversal/Emoji-Stealer/workflows/Test/badge.svg" />
     </a>
+    <a href="https://www.codacy.com/manual/Uni/Emoji-Stealer?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=TMUniversal/Emoji-Stealer&amp;utm_campaign=Badge_Grade">
+      <img src="https://app.codacy.com/project/badge/Grade/5d164400a96e44f1bac77bcdfeb1f883"/>
+    </a>
     <a href="https://github.com/TMUniversal/Emoji-Stealer/issues">
       <img src="https://img.shields.io/github/issues/TMUniversal/Emoji-Stealer.svg?style=flat">
     </a>
