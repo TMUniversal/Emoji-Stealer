@@ -4,6 +4,7 @@ import axios from 'axios'
 import { MessageEmbed } from '../../structures/MessageEmbed'
 import compress from '../../util/ImageCompressor'
 import { WebhookLogger } from '../../structures/WebhookLogger'
+import { validEmojiName } from '../../util/Validators'
 
 export default class ProfilePictureCommand extends Command {
   logger: WebhookLogger
@@ -34,11 +35,9 @@ export default class ProfilePictureCommand extends Command {
 
     const image = await compress(pfp)
 
-    message.util.send({ content: 'Uploading the following image as an emoji:', files: [new MessageAttachment(image)] })
+    const emojiName = validEmojiName(targetUser.username)
 
-    let emojiName = targetUser.username.replace(/[^a-zA-Z0-9]/gi, '')
-
-    if (!emojiName || emojiName.length === 0) emojiName = 'invalid_name'
+    message.util.send({ content: `Uploading the following image as ${emojiName}${emojiName === 'invalid_name' ? `, because ${targetUser.username} is not a valid name for an emoji.` : ''}:`, files: [new MessageAttachment(image)] })
 
     return message.guild.emojis.create(image, emojiName, { reason: `Requested by: ${message.author.tag}` })
       .catch((e) => {
