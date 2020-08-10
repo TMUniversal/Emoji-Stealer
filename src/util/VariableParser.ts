@@ -29,8 +29,8 @@ export default class VariableParser {
   public parse (input: string): string {
     let output = String(input)
     const vars = output.match(this.match)
-    if (vars?.length < 1) { return input }
-    vars?.forEach(element => {
+    if (vars.length < 1) { return input }
+    vars.forEach(element => {
       const key = element.replace(this.identifierRegex, '')
       if (_.has(this.data, key)) {
         output = output.replace(`${this.identifiers[0]}${key}${this.identifiers[1]}`, this.data[key].toString())
