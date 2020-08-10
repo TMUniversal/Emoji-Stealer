@@ -66,6 +66,7 @@ export default class StatusUpdater {
    * @returns {Promise<Presence>}
    */
   public async updateStatus (activity?: ActivityOptions, shardId?: number): Promise<Presence> {
+    this.parser.updateData({ users: this.client.users.cache.size, guilds: this.client.guilds.cache.size, channels: this.client.channels.cache.size })
     const $activity = activity || await this._chooseActivity()
     if (shardId) $activity.shardID = shardId
     return this.client.user.setActivity($activity)
