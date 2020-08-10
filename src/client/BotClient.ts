@@ -10,6 +10,7 @@ import appRootPath from 'app-root-path'
 import CustomEventEmitter from '../structures/CustomEventEmitter'
 import VariableParser from '../util/VariableParser'
 import StatusUpdater from '../structures/StatusUpdater'
+import Counter from '../structures/Counter'
 
 declare module 'discord-akairo' {
   interface AkairoClient {
@@ -24,6 +25,7 @@ declare module 'discord-akairo' {
     variableParser: VariableParser;
     statusUpdater: StatusUpdater;
     customEmitter: CustomEventEmitter;
+    counter: Counter;
 
     start(): Promise<BotClient>;
     changeStatus(): Promise<Presence>;
@@ -45,6 +47,7 @@ export default class BotClient extends AkairoClient {
   public variableParser: VariableParser;
   public logger: WebhookLogger;
   public eventEmitter: CustomEventEmitter;
+  public counter: Counter;
 
   public listenerHandler: ListenerHandler = new ListenerHandler(this, {
     directory: path.join(__dirname, '..', 'events')
@@ -85,6 +88,7 @@ export default class BotClient extends AkairoClient {
     this.config = config
     this.logger = WebhookLogger.instance
     this.eventEmitter = CustomEventEmitter.instance
+    this.counter = Counter.instance
     this.variableParser = new VariableParser({ website: 'tmuniversal.eu', prefix: configFile.prefix })
     this.statusUpdater = new StatusUpdater(this, this.variableParser, 'https://pastebin.com/raw/UDWZ0eZZ')
 
@@ -178,7 +182,7 @@ export default class BotClient extends AkairoClient {
         // eslint-disable-next-line no-console
         return console.debug(`Uploaded user base stats to API: ${r.guilds} guilds, ${r.channels} channels, ${r.users} users.`)
       })
-      .catch(err => this.logger.error('API', err))
+      .catch(err => this.logger.error('BotStat', err))
   }
 
   // Upload command usage stats to api
@@ -189,7 +193,7 @@ export default class BotClient extends AkairoClient {
         // eslint-disable-next-line no-console
         // return console.debug(`Command has been updated: ${result.command} was used ${result.uses} times.`)
       }).catch((err) => {
-        return this.logger.error('API', err)
+        return this.logger.error('BotStat', err)
       })
   }
 }

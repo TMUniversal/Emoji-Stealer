@@ -27,19 +27,25 @@ export default class ProfilePictureCommand extends Command {
     this.logger = WebhookLogger.instance
   }
 
-  public async exec (message: Message): Promise<Message | GuildEmoji> {
+  public async exec (message: Message): Promise<Message> {
     const targetUser = message.mentions.users.first() || message.author
 
     // Download their PFP
-    const pfp = Buffer.from((await axios.get(targetUser.avatarURL({ format: 'png', size: 256 }), { responseType: 'arraybuffer' })).data, 'utf-8') // TODO: Allow gifs
+    const avatarUrl = targetUser.avatarURL({ format: 'png', size: 256 })
+    if (typeof avatarUrl !== 'string') return message.util.send(`It seems ${targetUser} has no profile picture to steal...`)
+    const pfp = Buffer.from((await axios.get(avatarUrl, { responseType: 'arraybuffer' })).data, 'utf-8') // TODO: Allow gifs
 
     const image = await compress(pfp)
 
     const emojiName = validEmojiName(targetUser.username)
 
-    message.util.send({ content: `Uploading the following image as ${emojiName}${emojiName === 'invalid_name' ? `, because ${targetUser.username} is not a valid name for an emoji.` : ''}:`, files: [new MessageAttachment(image)] })
+    message.util.send({ content: `Uploading the following image as \`${emojiName}\`${emojiName === 'invalid_name' ? `, because ${targetUser.username} is not a valid name for an emoji.` : ''}:`, files: [new MessageAttachment(image)] })
 
     return message.guild.emojis.create(image, emojiName, { reason: `Requested by: ${message.author.tag}` })
+      .then(emoji => {
+        this.client.counter.updatePfpCount()
+        return message.util.send(`Done. <:${emoji.name}:${emoji.id}>`)
+      })
       .catch((e) => {
         this.logger.error('PFP UPLOAD', e)
         return message.channel.send('Could not upload!') // TODO: report what went wrong in more detail.

@@ -8,12 +8,16 @@
     "automake",
     "ayanaware",
     "botstat",
+    "countapi",
     "dblapi",
     "gifs",
     "gifsicle",
+    "lowerbound",
+    "pfps",
     "printf",
     "ratelimit",
     "startmon",
-    "stealprofile"
+    "stealprofile",
+    "upperbound"
   ]
 }

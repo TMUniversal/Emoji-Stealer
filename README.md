@@ -69,7 +69,12 @@ On linux you may need additional dependencies for the image compression packages
     "owners": "<Your Discord ID>",
     // OR
     "owners": ["<Your Discord ID>", "<Another Discord ID>"],
-    "userBlacklist": ["<some id>"] // users that cannot use commands
+    "userBlacklist": ["<some id>"], // users that cannot use commands
+    "counter": { // naming your emoji counters
+      "namespace": "",
+      "emojiKey": "",
+      "pfpKey": ""
+    }
   }
 ```
 

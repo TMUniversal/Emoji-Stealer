@@ -8,5 +8,10 @@
   "dblToken": "<Token>",
   "prefix": ">",
   "owners": "",
-  "userBlacklist": ["<some id>"]
+  "userBlacklist": ["<some id>"],
+  "counter": {
+		"namespace": "",
+		"emojiKey": "",
+		"pfpKey": ""
+	}
 }
