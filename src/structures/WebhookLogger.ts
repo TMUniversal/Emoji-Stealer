@@ -18,7 +18,7 @@ export class WebhookLogger extends Logger {
     return this._instance || new this()
   }
 
-  private _webhookLevel: LogLevel = LogLevel.SILLY;
+  private _webhookLevel: LogLevel = LogLevel.VERBOSE;
 
   protected _write (level: LogLevel, tag: string, data: any[]): void {
     super._write(level, `Webhook][${tag}`, data)

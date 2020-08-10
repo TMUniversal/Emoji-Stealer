@@ -10,7 +10,7 @@ export default class CustomEventEmitter extends EventEmitter {
   public constructor () {
     super()
     if ((this.constructor as typeof CustomEventEmitter)._instance) {
-      throw new Error('Can not create multiple instances of Logger singleton.')
+      throw new Error('Can not create multiple instances of singleton.')
     }
 
     (this.constructor as typeof CustomEventEmitter)._instance = this

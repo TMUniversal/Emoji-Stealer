@@ -23,40 +23,27 @@ export default class StealCommand extends Command {
   }
 
   public async exec (message: Message): Promise<Message | void> {
-    // // eslint-disable-next-line no-useless-escape
-    // const emojiRegex = /<:[\w !"#$%&'()*+,-./;<=>?@[\\\]\^_`\{\|\}~]{1,32}:\d{16,32}>/gmiu
-    // if (emojiRegex.test(message.content)) {
-    //   message.cleanContent.match(emojiRegex).forEach(match => {
-    //     const details = {
-    //       name: match.split(':')[1],
-    //       id: match.split(':')[2].replace(/[<>]/g, ''),
-    //       combined: match.replace(/[<>]/gi, '')
-    //     }
-    //     const emoji = this.client.emojis.resolve(details.id)
-    //     console.log('emoji detected: ' + emoji)
-    //   })
-    // } else {
     return message.util.send(MessageEmbed.common({ author: message.author })
       .setTitle('Emoji Stealer')
-      .setDescription('**To \'steal\' emojis, react to this message with any custom emojis** (this requires Discord Nitro).\n\n' +
+      .setDescription('**To *steal* emojis, react to this message with any custom emojis** (this requires Discord Nitro).\n\n' +
           'I will give you 30 seconds to choose, then upload your chosen custom emojis to this guild.'))
       .then(async m => {
         // Collect reactions
         return m.awaitReactions(this.filter, { time: 35000 })
           .then(async collected => {
             const reactions = collected.filter(emoji => emoji.users.cache.has(message.author.id))
-            if (reactions.size < 1) return message.util.reply('You\'re supposed to add custom emojis... Please try again...')
+            if (reactions.size < 1) return message.util.reply('you\'re supposed to add custom emojis... Please try again...')
             for (const [, reaction] of reactions) {
               const response = await axios.get(reaction.emoji.url, { responseType: 'arraybuffer' })
               const image = Buffer.from(response.data, 'utf-8')
               message.guild.emojis.create(image, reaction.emoji.name, { reason: `Requested by: ${message.author.tag} (${message.author.id})` })
+                .then(() => this.client.counter.updateEmojiCount())
                 .catch(() => message.channel.send('Could not upload emoji: ' + reaction.emoji.name))
             }
             return message.util.reply('done.')
           })
           .catch(() => { return message.util.reply('Something\'s not right, I can feel it.') })
       })
-    // }
   }
 
   private filter (reaction: MessageReaction, user: User): boolean {
