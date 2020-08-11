@@ -18,13 +18,13 @@
     "postversion": "git push && git push --tags"
   },
   "dependencies": {
-    "@tmuniversal/counter": "^1.0.1",
+    "@tmuniversal/counter": "^1.0.2",
     "@tmuniversal/weeb-wrapper": "^0.3.1",
     "app-root-path": "^3.0.0",
     "axios": "^0.19.2",
     "countapi-js": "^1.0.1",
-    "dblapi.js": "^2.4.0",
-    "discord-akairo": "^8.0.0",
+    "dblapi.js": "^2.4.1",
+    "discord-akairo": "^8.1.0",
     "discord.js": "12.2.0",
     "imagemin": "^7.0.1",
     "imagemin-gifsicle": "^7.0.0",
