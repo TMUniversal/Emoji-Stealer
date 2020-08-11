@@ -2,7 +2,6 @@ import { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler } from 
 import { User, Message, ActivityType, ActivityOptions, Presence } from 'discord.js'
 import WeebWrapper from '@tmuniversal/weeb-wrapper'
 import * as path from 'path'
-import axios, { AxiosInstance } from 'axios'
 import DBL from 'dblapi.js'
 import { WebhookLogger } from '../structures/WebhookLogger'
 import configFile from '../config'
