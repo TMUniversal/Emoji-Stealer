@@ -18,7 +18,7 @@
     "postversion": "git push && git push --tags"
   },
   "dependencies": {
-    "@tmuniversal/counter": "^1.0.1",
+    "@tmuniversal/counter": "^1.0.2",
     "@tmuniversal/weeb-wrapper": "^0.3.1",
     "app-root-path": "^3.0.0",
     "axios": "^0.19.2",
