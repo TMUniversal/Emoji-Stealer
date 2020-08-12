@@ -11,7 +11,7 @@ export enum LogLevel {
   INFO,
   VERBOSE,
   DEBUG,
-  SILLY,
+  SILLY
 }
 
 export const colors: IColor = {
@@ -31,5 +31,5 @@ export interface IColor {
   /**
    * [background, foreground]
    */
-  [index: number]: [number, number, ColorResolvable];
+  [index: number]: [number, number, ColorResolvable]
 }

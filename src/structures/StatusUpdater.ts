@@ -17,12 +17,12 @@ const defaultStatuses: Array<ActivityOptions> = [
 ]
 
 export default class StatusUpdater {
-  private client: BotClient;
-  private parser: VariableParser;
-  public statusUrl?: string;
-  private _statuses: ActivityOptions[];
-  private logger: WebhookLogger;
-  private isReady: boolean;
+  private client: BotClient
+  private parser: VariableParser
+  public statusUrl?: string
+  private _statuses: ActivityOptions[]
+  private logger: WebhookLogger
+  private isReady: boolean
   /**
    * A status updater that can pull from the internet
    * @param {BotClient} client discord.js (extending) client

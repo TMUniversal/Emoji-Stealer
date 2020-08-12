@@ -12,13 +12,13 @@ import configFile from '../config'
 const webhook: WebhookClient = new WebhookClient(configFile.webhook.id, configFile.webhook.secret)
 
 export class WebhookLogger extends Logger {
-  protected static _instance: WebhookLogger;
+  protected static _instance: WebhookLogger
 
   public static get instance (): WebhookLogger {
     return this._instance || new this()
   }
 
-  private _webhookLevel: LogLevel = LogLevel.VERBOSE;
+  private _webhookLevel: LogLevel = LogLevel.VERBOSE
 
   protected _write (level: LogLevel, tag: string, data: any[]): void {
     super._write(level, `Webhook][${tag}`, data)

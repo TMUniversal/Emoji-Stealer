@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events'
 
 export default class CustomEventEmitter extends EventEmitter {
-  protected static _instance: CustomEventEmitter;
+  protected static _instance: CustomEventEmitter
 
   public static get instance (): CustomEventEmitter {
     return this._instance || new this()

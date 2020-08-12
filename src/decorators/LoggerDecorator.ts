@@ -25,9 +25,9 @@ function getHandler (prefix: string): ProxyHandler<Logger> {
 
 // Original idea from:
 // Link: https://github.com/RobinBuschmann/sequelize-typescript/blob/master/lib/annotations/Column.ts
-export function Loggable(defineStatic: boolean): ClassDecorator;
-export function Loggable(prefix: string, defineStatic?: boolean): ClassDecorator;
-export function Loggable<T extends Function>(constructor: T): void;
+export function Loggable (defineStatic: boolean): ClassDecorator
+export function Loggable (prefix: string, defineStatic?: boolean): ClassDecorator
+export function Loggable<T extends Function> (constructor: T): void
 export function Loggable<T extends Function> (
   firstParam: T | string | boolean,
   defineStatic?: boolean

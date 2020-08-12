@@ -1,3 +1,4 @@
+// tslint:disable: tsr-detect-non-literal-regexp
 import _ from 'lodash'
 
 export default class VariableParser {

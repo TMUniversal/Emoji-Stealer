@@ -1,0 +1,6 @@
+{
+  "extends": "@tmuniversal/ts/lint",
+  "rules": {
+    "no-floating-promises": false
+  }
+}

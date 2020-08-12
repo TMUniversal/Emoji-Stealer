@@ -1,3 +1,4 @@
+// tslint:disable: no-floating-promises
 import { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler } from 'discord-akairo'
 import { User, Message, ActivityType, ActivityOptions, Presence } from 'discord.js'
 import WeebWrapper from '@tmuniversal/weeb-wrapper'
@@ -13,40 +14,40 @@ import Counter from '../structures/Counter'
 
 declare module 'discord-akairo' {
   interface AkairoClient {
-    commandHandler: CommandHandler;
-    listenerHandler: ListenerHandler;
-    inhibitorHandler: InhibitorHandler;
-    config: BotOptions;
-    logger: WebhookLogger;
-    wrapper?: WeebWrapper;
-    botstat?: WeebWrapper['statistics'];
-    dbl?: DBL;
-    variableParser: VariableParser;
-    statusUpdater: StatusUpdater;
-    customEmitter: CustomEventEmitter;
-    counter: Counter;
+    commandHandler: CommandHandler
+    listenerHandler: ListenerHandler
+    inhibitorHandler: InhibitorHandler
+    config: BotOptions
+    logger: WebhookLogger
+    wrapper?: WeebWrapper
+    botstat?: WeebWrapper['statistics']
+    dbl?: DBL
+    variableParser: VariableParser
+    statusUpdater: StatusUpdater
+    customEmitter: CustomEventEmitter
+    counter: Counter
 
-    start(): Promise<BotClient>;
-    changeStatus(): Promise<Presence>;
-    updateBotStats(guilds: number, channels: number, users: number): Promise<void>;
+    start (): Promise<BotClient>
+    changeStatus (): Promise<Presence>
+    updateBotStats (guilds: number, channels: number, users: number): Promise<void>
   }
 }
 
 interface BotOptions {
-  token?: string;
-  owners?: string | string[];
+  token?: string
+  owners?: string | string[]
 }
 
 export default class BotClient extends AkairoClient {
-  public config: BotOptions;
-  public wrapper?: WeebWrapper;
-  public botstat?: WeebWrapper['statistics'];
-  public dbl?: DBL;
-  public statusUpdater: StatusUpdater;
-  public variableParser: VariableParser;
-  public logger: WebhookLogger;
-  public eventEmitter: CustomEventEmitter;
-  public counter: Counter;
+  public config: BotOptions
+  public wrapper?: WeebWrapper
+  public botstat?: WeebWrapper['statistics']
+  public dbl?: DBL
+  public statusUpdater: StatusUpdater
+  public variableParser: VariableParser
+  public logger: WebhookLogger
+  public eventEmitter: CustomEventEmitter
+  public counter: Counter
 
   public listenerHandler: ListenerHandler = new ListenerHandler(this, {
     directory: path.join(__dirname, '..', 'events')
@@ -122,6 +123,7 @@ export default class BotClient extends AkairoClient {
 
     // Error handlers
     // Regex to match the root path of the project. Escapes path separators on windows and linux
+    // tslint:disable-next-line: tsr-detect-non-literal-regexp
     const pathRegex = new RegExp(path.normalize(appRootPath.toString()).replace(/\\/g, '\\\\').replace(/\//g, '\\/'), 'gmi')
 
     this.on('error', e => this.logger.error('CLIENT', e.message))

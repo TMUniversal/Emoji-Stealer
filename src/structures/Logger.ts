@@ -13,7 +13,7 @@ type LevelFunctions = 'silly' | 'debug' | 'verbose' | 'info' | 'warn' | 'error'
 /**
  * A logger, except that the logging functions do not accept a tag anymore.
  */
-export type AttachedLogger = Omit<Logger, LevelFunctions> & Record<LevelFunctions, (...input: any[]) => Promise<void>>;
+export type AttachedLogger = Omit<Logger, LevelFunctions> & Record<LevelFunctions, (...input: any[]) => Promise<void>>
 
 /**
  * Singleton Logger
@@ -29,12 +29,12 @@ export class Logger {
   /**
    * Logger instance
    */
-  protected static _instance: Logger;
+  protected static _instance: Logger
 
   /**
    * Current log level
    */
-  protected _logLevel: LogLevel;
+  protected _logLevel: LogLevel
 
   /**
    * Instantiate the Logger singleton.
