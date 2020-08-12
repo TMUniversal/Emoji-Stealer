@@ -19,8 +19,8 @@ export default class StatusUpdater {
   private client: BotClient;
   private parser: VariableParser;
   public statusUrl?: string;
-  public statuses: ActivityOptions[];
   private _statuses: ActivityOptions[];
+  private isReady: boolean;
   /**
    * A status updater that can pull from the internet
    * @param {BotClient} client discord.js (extending) client
@@ -45,35 +45,63 @@ export default class StatusUpdater {
       } else if (_.isArray(statuses)) this._statuses = statuses
       else throw new Error('Invalid status options.')
     }
+
+    this.isReady = false
+
+    this._init()
   }
 
+  private async _init () {
+    this._getStatuses().then(() => {
+      this.isReady = true
+    }).catch(err => {
+      throw err || new Error('[StatusUpdater] Failed to initialize.')
+    })
+  }
+
+  /**
+   * Try to download the latest ActivityOptions data.
+   */
   private async _getStatuses (): Promise<ActivityOptions[]> {
-    if (this._statuses) return this._statuses
-    else if (this.statusUrl) {
+    if (this.statusUrl) {
       const statuses = await Axios.get(this.statusUrl)
       this._statuses = statuses.data
       return this._statuses
-    } else return defaultStatuses
+    } else {
+      return defaultStatuses
+    }
   }
 
-  private async getStatuses (): Promise<ActivityOptions[]> {
-    this.statuses = await this._getStatuses()
-    return this.statuses
+  /**
+   * Update the variable parser with the latest data from the client.
+   */
+  private _updateParserData () {
+    return this.parser.updateData({ users: this.client.users.cache.size, guilds: this.client.guilds.cache.size, channels: this.client.channels.cache.size })
+  }
+
+  /**
+   * An array of possible status messages (as ActivityOptions)
+   * @type ActivityOptions[]
+   */
+  public get statuses (): ActivityOptions[] {
+    // If the status download isn't done yet, serve the default statuses instead.
+    if (!this.isReady) return defaultStatuses
+    return this._statuses
   }
 
   /**
    * Trigger a status update
    * @returns {Promise<Presence>}
    */
-  public async updateStatus (activity?: ActivityOptions, shardId?: number): Promise<Presence> {
-    this.parser.updateData({ users: this.client.users.cache.size, guilds: this.client.guilds.cache.size, channels: this.client.channels.cache.size })
-    const $activity = activity || await this._chooseActivity()
+  public updateStatus (activity?: ActivityOptions, shardId?: number): Promise<Presence> {
+    this._updateParserData()
+    const $activity = activity || this._chooseActivity()
     if (shardId) $activity.shardID = shardId
     return this.client.user.setActivity($activity)
   }
 
-  private async _chooseActivity (): Promise<ActivityOptions> {
-    const info = (await this.getStatuses())[~~(Math.random() * this.statuses.length)]
+  private _chooseActivity (): ActivityOptions {
+    const info = this.statuses[~~(Math.random() * this.statuses.length)]
     const details: ActivityOptions = { ...info, type: info.type || 'PLAYING', name: this.parser.parse(info.name) || 'a game' }
 
     return details
