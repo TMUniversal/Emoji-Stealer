@@ -84,6 +84,9 @@ export default class BotClient extends AkairoClient {
       ownerID: config.owners
     })
 
+    // eslint-disable-next-line no-console
+    console.log('[Client]', 'Initializing...')
+
     this.config = config
     this.logger = WebhookLogger.instance
     this.eventEmitter = CustomEventEmitter.instance
@@ -139,7 +142,7 @@ export default class BotClient extends AkairoClient {
 
   public async start (): Promise<BotClient> {
     // eslint-disable-next-line no-console
-    console.log('Starting the bot...')
+    console.log('[Bot]', 'Starting up...')
     await this._init()
     await this.login(this.config.token)
 
