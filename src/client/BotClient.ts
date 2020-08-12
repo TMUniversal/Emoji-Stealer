@@ -155,8 +155,6 @@ export default class BotClient extends AkairoClient {
     this.setInterval(() => this.eventEmitter.emit('changeStatus'), 5 * 60 * 1000) // every five minutes
     this.setInterval(() => this.eventEmitter.emit('updateStats'), 20 * 60 * 1000) // every twenty minutes
 
-    await this.updateStats()
-
     return this
   }
 
@@ -193,13 +191,13 @@ export default class BotClient extends AkairoClient {
   }
 
   public stop () {
-    this.logger.warn('PROCESS', 'Received exit signal => quitting in 3 seconds...')
+    this.logger.warn('PROCESS', 'Received exit signal => quitting in 4 seconds...')
     this.destroy()
     this.updateStats()
     this.counter.destroy()
     setTimeout(() => {
-      this.logger.debug('PROCESS', 'Exit.')
+      this.logger.warn('PROCESS', 'Exit.')
       process.exit(0)
-    }, 5000)
+    }, 4000)
   }
 }
