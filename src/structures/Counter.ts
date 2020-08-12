@@ -17,6 +17,7 @@ export default class Counter {
   private logger: WebhookLogger;
   private emojiCounter: CustomCounter;
   private pfpCounter: CustomCounter;
+  private updateInterval;
 
   public static get instance (): Counter {
     return this._instance || new this()
@@ -40,7 +41,7 @@ export default class Counter {
 
     // periodically post updates
 
-    setInterval(() => {
+    this.updateInterval = setInterval(() => {
       this.eventEmitter.emit('postUpdates')
     }, 5 * 60 * 1000)
 
@@ -61,7 +62,7 @@ export default class Counter {
     })
 
     this.eventEmitter.on('ready', async () => {
-      this.logger.silly('Counter', 'Done.')
+      this.logger.silly('Counter', 'Ready.')
       this.logger.debug('Counter', 'API Data:', `Emojis: ${await this.getEmojiCount()}`, `Pfps: ${await this.getPfpCount()}`)
     })
 
@@ -135,5 +136,11 @@ export default class Counter {
 
   private async _create (key: string, namespace: string, value = 0, enable_reset = 0, update_lowerbound = -1, update_upperbound = 1): Promise<Object> {
     return await countapi.create({ key, namespace, value, enable_reset, update_lowerbound, update_upperbound })
+  }
+
+  public destroy () {
+    this.logger.silly('Counter', 'Exiting...')
+    clearInterval(this.updateInterval)
+    this.eventEmitter.emit('postUpdates')
   }
 }

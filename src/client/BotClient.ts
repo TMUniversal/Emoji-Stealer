@@ -125,11 +125,8 @@ export default class BotClient extends AkairoClient {
     this.on('warn', w => this.logger.warn('CLIENT', w))
 
     //  Process handling / do not crash on error
-    process.once('SIGINT', () => {
-      this.logger.warn('PROCESS', 'Received SIGINT => Quitting.')
-      this.destroy()
-      process.exit(0)
-    })
+    process.once('SIGINT', () => this.stop())
+    process.once('SIGTERM', () => this.stop())
     process.on('uncaughtException', (err: Error) => {
       const errorMsg = (err ? err.stack || err : '').toString().replace(pathRegex, '.')
       this.logger.error('EXCEPTION', errorMsg)
@@ -147,30 +144,31 @@ export default class BotClient extends AkairoClient {
     await this.login(this.config.token)
 
     // Register event handling for custom events
-    this.eventEmitter.on('updateStats', (client: BotClient) => {
-      if (client.botstat) client.updateBotStats(client.guilds.cache.size, client.channels.cache.size, client.users.cache.size)
-      if (client.dbl) client.dbl.postStats(client.guilds.cache.size)
-    })
-    this.eventEmitter.on('logCommand', (command: string) => {
-      return this.logCommandToApi(command)
-    })
-    this.eventEmitter.on('changeStatus', () => {
-      return this.changeStatus()
-    })
+    this.eventEmitter.on('updateStats', () => this.updateStats())
+    this.eventEmitter.on('logCommand', command => this.logCommandToApi(command))
+    this.eventEmitter.on('changeStatus', () => this.changeStatus())
 
     // Set a startup notice. This will be overridden upon ready.
     this.user.setActivity({ name: 'Starting up...', type: 'PLAYING' })
 
     // Automate status changes and upload stat uploads.
     this.setInterval(() => this.eventEmitter.emit('changeStatus'), 5 * 60 * 1000) // every five minutes
-    this.setInterval(() => this.eventEmitter.emit('updateStats', this), 20 * 60 * 1000) // every twenty minutes
+    this.setInterval(() => this.eventEmitter.emit('updateStats'), 20 * 60 * 1000) // every twenty minutes
+
+    await this.updateStats()
 
     return this
   }
 
   // Function for (randomized) status changes
   public async changeStatus (options?: ActivityOptions): Promise<Presence> {
+    if (options) return this.statusUpdater.updateStatus(options)
     return this.statusUpdater.updateStatus()
+  }
+
+  public async updateStats () {
+    if (this.botstat) this.updateBotStats(this.guilds.cache.size, this.channels.cache.size, this.users.cache.size)
+    if (this.dbl) this.dbl.postStats(this.guilds.cache.size)
   }
 
   // Upload user stats to api
@@ -178,21 +176,30 @@ export default class BotClient extends AkairoClient {
     if (!this.botstat) return Promise.resolve(this.logger.warn('API', 'Cannot upload bot stats: API is disabled'))
     return this.botstat.updateBot(this.user.id, guilds, channels, users)
       .then((r) => {
-        // eslint-disable-next-line no-console
-        return console.debug(`Uploaded user base stats to API: ${r.guilds} guilds, ${r.channels} channels, ${r.users} users.`)
+        return this.logger.silly(`Uploaded user base stats to API: ${r.guilds} guilds, ${r.channels} channels, ${r.users} users.`)
       })
       .catch(err => this.logger.error('BotStat', err))
   }
 
   // Upload command usage stats to api
   public async logCommandToApi (command: string) {
-    if (!this.botstat) return Promise.resolve(this.logger.warn('API', 'Cannot upload command stats: API is disabled'))
+    if (!this.botstat) return Promise.resolve(this.logger.warn('API', 'Cannot upload command stats: API is disabled', command))
     return this.botstat.increaseCommandUsage(this.user.id, command)
       .then((result) => {
-        // eslint-disable-next-line no-console
-        // return console.debug(`Command has been updated: ${result.command} was used ${result.uses} times.`)
+        return this.logger.silly(`Command has been updated: ${result.command} was used ${result.uses} times.`)
       }).catch((err) => {
         return this.logger.error('BotStat', err)
       })
+  }
+
+  public stop () {
+    this.logger.warn('PROCESS', 'Received exit signal => quitting in 3 seconds...')
+    this.destroy()
+    this.updateStats()
+    this.counter.destroy()
+    setTimeout(() => {
+      this.logger.debug('PROCESS', 'Exit.')
+      process.exit(0)
+    }, 5000)
   }
 }

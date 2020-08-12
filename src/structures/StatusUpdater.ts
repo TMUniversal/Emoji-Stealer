@@ -4,6 +4,7 @@ import { isUrl } from '../util/Validators'
 import BotClient from '../client/BotClient'
 import VariableParser from '../util/VariableParser'
 import Axios from 'axios'
+import { WebhookLogger } from './WebhookLogger'
 
 const defaultStatuses: Array<ActivityOptions> = [
   { type: 'PLAYING', name: 'with {users} users' },
@@ -20,6 +21,7 @@ export default class StatusUpdater {
   private parser: VariableParser;
   public statusUrl?: string;
   private _statuses: ActivityOptions[];
+  private logger: WebhookLogger;
   private isReady: boolean;
   /**
    * A status updater that can pull from the internet
@@ -46,16 +48,20 @@ export default class StatusUpdater {
       else throw new Error('Invalid status options.')
     }
 
+    this.logger = WebhookLogger.instance
+
     this.isReady = false
 
     this._init()
   }
 
   private async _init () {
+    this.logger.silly('StatusUpdater', 'Initializing Status Updater.')
     this._getStatuses().then(() => {
       this.isReady = true
+      this.logger.silly('StatusUpdater', 'Ready.')
     }).catch(err => {
-      throw err || new Error('[StatusUpdater] Failed to initialize.')
+      this.logger.error('StatusUpdater', err)
     })
   }
 
@@ -64,10 +70,13 @@ export default class StatusUpdater {
    */
   private async _getStatuses (): Promise<ActivityOptions[]> {
     if (this.statusUrl) {
+      this.logger.silly('StatusUpdater', 'Attempting to download...')
       const statuses = await Axios.get(this.statusUrl)
       this._statuses = statuses.data
+      this.logger.silly('StatusUpdater', 'Download successful.')
       return this._statuses
     } else {
+      this.logger.warn('StatusUpdater', 'Something went wrong while downloading and/or parsing the data.')
       return defaultStatuses
     }
   }
