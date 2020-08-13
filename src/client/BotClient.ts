@@ -20,7 +20,6 @@ declare module 'discord-akairo' {
     config: BotOptions
     logger: WebhookLogger
     wrapper?: WeebWrapper
-    botstat?: WeebWrapper['statistics']
     dbl?: DBL
     variableParser: VariableParser
     statusUpdater: StatusUpdater
@@ -38,10 +37,9 @@ interface BotOptions {
   owners?: string | string[]
 }
 
-export default class BotClient extends AkairoClient {
+export default class BotClient extends AkairoClient implements AkairoClient {
   public config: BotOptions
   public wrapper?: WeebWrapper
-  public botstat?: WeebWrapper['statistics']
   public dbl?: DBL
   public statusUpdater: StatusUpdater
   public variableParser: VariableParser
@@ -97,9 +95,8 @@ export default class BotClient extends AkairoClient {
 
     if (configFile.weebToken && configFile.weebToken?.length !== 0) {
       this.wrapper = new WeebWrapper(configFile.weebToken, 'https://api.tmuniversal.eu')
-      this.botstat = this.wrapper.statistics
     } else {
-      this.wrapper = this.botstat = null
+      this.wrapper = null
     }
 
     if (configFile.dblToken && configFile.dblToken.length !== 0) {
@@ -170,14 +167,14 @@ export default class BotClient extends AkairoClient {
   }
 
   public async updateStats () {
-    if (this.botstat) this.updateBotStats(this.guilds.cache.size, this.channels.cache.size, this.users.cache.size)
+    if (this.wrapper.statistics) this.updateBotStats(this.guilds.cache.size, this.channels.cache.size, this.users.cache.size)
     if (this.dbl) this.dbl.postStats(this.guilds.cache.size)
   }
 
   // Upload user stats to api
   public async updateBotStats (guilds: number, channels: number, users: number) {
-    if (!this.botstat) return Promise.resolve(this.logger.warn('API', 'Cannot upload bot stats: API is disabled'))
-    return this.botstat.updateBot(this.user.id, guilds, channels, users)
+    if (!this.wrapper.statistics) return Promise.resolve(this.logger.warn('API', 'Cannot upload bot stats: API is disabled'))
+    return this.wrapper.statistics.updateBot(this.user.id, guilds, channels, users)
       .then((r) => {
         return this.logger.silly('BotStat', '[Upload]', `Uploaded user base stats to API: ${r.guilds} guilds, ${r.channels} channels, ${r.users} users.`)
       })
@@ -186,8 +183,8 @@ export default class BotClient extends AkairoClient {
 
   // Upload command usage stats to api
   public async logCommandToApi (command: string) {
-    if (!this.botstat) return Promise.resolve(this.logger.warn('API', 'Cannot upload command stats: API is disabled', command))
-    return this.botstat.increaseCommandUsage(this.user.id, command)
+    if (!this.wrapper.statistics) return Promise.resolve(this.logger.warn('API', 'Cannot upload command stats: API is disabled', command))
+    return this.wrapper.statistics.increaseCommandUsage(this.user.id, command)
       .then((result) => {
         return this.logger.silly('BotStat', '[Upload]', `Command has been updated: ${result.command} was used ${result.uses} times.`)
       }).catch((err) => {
