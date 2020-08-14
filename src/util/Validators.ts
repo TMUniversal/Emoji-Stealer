@@ -13,7 +13,7 @@ export const isValidEmojiName = (name: string): boolean => {
 
 export const validEmojiName = (name: string): string => {
   // Filter disallowed characters
-  const emojiName = name.replace(/[^a-zA-Z0-9]/gi, '')
+  const emojiName = name.replace(/[^\w]/gi, '')
   if (!isValidEmojiName(emojiName)) return 'invalid_name'
   return emojiName
 }

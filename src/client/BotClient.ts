@@ -1,8 +1,8 @@
+// tslint:disable: no-floating-promises
 import { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler } from 'discord-akairo'
 import { User, Message, ActivityType, ActivityOptions, Presence } from 'discord.js'
 import WeebWrapper from '@tmuniversal/weeb-wrapper'
 import * as path from 'path'
-import axios, { AxiosInstance } from 'axios'
 import DBL from 'dblapi.js'
 import { WebhookLogger } from '../structures/WebhookLogger'
 import configFile from '../config'
@@ -14,40 +14,38 @@ import Counter from '../structures/Counter'
 
 declare module 'discord-akairo' {
   interface AkairoClient {
-    commandHandler: CommandHandler;
-    listenerHandler: ListenerHandler;
-    inhibitorHandler: InhibitorHandler;
-    config: BotOptions;
-    logger: WebhookLogger;
-    wrapper?: WeebWrapper;
-    botstat?: WeebWrapper['statistics'];
-    dbl?: DBL;
-    variableParser: VariableParser;
-    statusUpdater: StatusUpdater;
-    customEmitter: CustomEventEmitter;
-    counter: Counter;
+    commandHandler: CommandHandler
+    listenerHandler: ListenerHandler
+    inhibitorHandler: InhibitorHandler
+    config: BotOptions
+    logger: WebhookLogger
+    wrapper?: WeebWrapper
+    dbl?: DBL
+    variableParser: VariableParser
+    statusUpdater: StatusUpdater
+    customEmitter: CustomEventEmitter
+    counter: Counter
 
-    start(): Promise<BotClient>;
-    changeStatus(): Promise<Presence>;
-    updateBotStats(guilds: number, channels: number, users: number): Promise<void>;
+    start (): Promise<BotClient>
+    changeStatus (): Promise<Presence>
+    updateBotStats (guilds: number, channels: number, users: number): Promise<void>
   }
 }
 
 interface BotOptions {
-  token?: string;
-  owners?: string | string[];
+  token?: string
+  owners?: string | string[]
 }
 
-export default class BotClient extends AkairoClient {
-  public config: BotOptions;
-  public wrapper?: WeebWrapper;
-  public botstat?: WeebWrapper['statistics'];
-  public dbl?: DBL;
-  public statusUpdater: StatusUpdater;
-  public variableParser: VariableParser;
-  public logger: WebhookLogger;
-  public eventEmitter: CustomEventEmitter;
-  public counter: Counter;
+export default class BotClient extends AkairoClient implements AkairoClient {
+  public config: BotOptions
+  public wrapper?: WeebWrapper
+  public dbl?: DBL
+  public statusUpdater: StatusUpdater
+  public variableParser: VariableParser
+  public logger: WebhookLogger
+  public eventEmitter: CustomEventEmitter
+  public counter: Counter
 
   public listenerHandler: ListenerHandler = new ListenerHandler(this, {
     directory: path.join(__dirname, '..', 'events')
@@ -85,6 +83,9 @@ export default class BotClient extends AkairoClient {
       ownerID: config.owners
     })
 
+    // eslint-disable-next-line no-console
+    console.log('[Client]', 'Initializing...')
+
     this.config = config
     this.logger = WebhookLogger.instance
     this.eventEmitter = CustomEventEmitter.instance
@@ -94,9 +95,8 @@ export default class BotClient extends AkairoClient {
 
     if (configFile.weebToken && configFile.weebToken?.length !== 0) {
       this.wrapper = new WeebWrapper(configFile.weebToken, 'https://api.tmuniversal.eu')
-      this.botstat = this.wrapper.statistics
     } else {
-      this.wrapper = this.botstat = null
+      this.wrapper = null
     }
 
     if (configFile.dblToken && configFile.dblToken.length !== 0) {
@@ -120,17 +120,15 @@ export default class BotClient extends AkairoClient {
 
     // Error handlers
     // Regex to match the root path of the project. Escapes path separators on windows and linux
+    // tslint:disable-next-line: tsr-detect-non-literal-regexp
     const pathRegex = new RegExp(path.normalize(appRootPath.toString()).replace(/\\/g, '\\\\').replace(/\//g, '\\/'), 'gmi')
 
     this.on('error', e => this.logger.error('CLIENT', e.message))
     this.on('warn', w => this.logger.warn('CLIENT', w))
 
     //  Process handling / do not crash on error
-    process.once('SIGINT', () => {
-      this.logger.warn('PROCESS', 'Received SIGINT => Quitting.')
-      this.destroy()
-      process.exit(0)
-    })
+    process.once('SIGINT', () => this.stop())
+    process.once('SIGTERM', () => this.stop())
     process.on('uncaughtException', (err: Error) => {
       const errorMsg = (err ? err.stack || err : '').toString().replace(pathRegex, '.')
       this.logger.error('EXCEPTION', errorMsg)
@@ -143,57 +141,65 @@ export default class BotClient extends AkairoClient {
 
   public async start (): Promise<BotClient> {
     // eslint-disable-next-line no-console
-    console.log('Starting the bot...')
+    console.log('[Bot]', 'Starting up...')
     await this._init()
     await this.login(this.config.token)
 
     // Register event handling for custom events
-    this.eventEmitter.on('updateStats', (client: BotClient) => {
-      if (client.botstat) client.updateBotStats(client.guilds.cache.size, client.channels.cache.size, client.users.cache.size)
-      if (client.dbl) client.dbl.postStats(client.guilds.cache.size)
-    })
-    this.eventEmitter.on('logCommand', (command: string) => {
-      return this.logCommandToApi(command)
-    })
-    this.eventEmitter.on('changeStatus', () => {
-      return this.changeStatus()
-    })
+    this.eventEmitter.on('updateStats', () => this.updateStats())
+    this.eventEmitter.on('logCommand', command => this.logCommandToApi(command))
+    this.eventEmitter.on('changeStatus', () => this.changeStatus())
 
     // Set a startup notice. This will be overridden upon ready.
     this.user.setActivity({ name: 'Starting up...', type: 'PLAYING' })
 
     // Automate status changes and upload stat uploads.
     this.setInterval(() => this.eventEmitter.emit('changeStatus'), 5 * 60 * 1000) // every five minutes
-    this.setInterval(() => this.eventEmitter.emit('updateStats', this), 20 * 60 * 1000) // every twenty minutes
+    this.setInterval(() => this.eventEmitter.emit('updateStats'), 20 * 60 * 1000) // every twenty minutes
 
     return this
   }
 
   // Function for (randomized) status changes
   public async changeStatus (options?: ActivityOptions): Promise<Presence> {
+    if (options) return this.statusUpdater.updateStatus(options)
     return this.statusUpdater.updateStatus()
+  }
+
+  public async updateStats () {
+    if (this.wrapper?.statistics) this.updateBotStats(this.guilds.cache.size, this.channels.cache.size, this.users.cache.size)
+    if (this.dbl) this.dbl.postStats(this.guilds.cache.size)
   }
 
   // Upload user stats to api
   public async updateBotStats (guilds: number, channels: number, users: number) {
-    if (!this.botstat) return Promise.resolve(this.logger.warn('API', 'Cannot upload bot stats: API is disabled'))
-    return this.botstat.updateBot(this.user.id, guilds, channels, users)
+    if (!this.wrapper?.statistics) return Promise.resolve(this.logger.warn('API', 'Cannot upload bot stats: API is disabled'))
+    return this.wrapper.statistics.updateBot(this.user.id, guilds, channels, users)
       .then((r) => {
-        // eslint-disable-next-line no-console
-        return console.debug(`Uploaded user base stats to API: ${r.guilds} guilds, ${r.channels} channels, ${r.users} users.`)
+        return this.logger.silly('BotStat', '[Upload]', `Uploaded user base stats to API: ${r.guilds} guilds, ${r.channels} channels, ${r.users} users.`)
       })
       .catch(err => this.logger.error('BotStat', err))
   }
 
   // Upload command usage stats to api
   public async logCommandToApi (command: string) {
-    if (!this.botstat) return Promise.resolve(this.logger.warn('API', 'Cannot upload command stats: API is disabled'))
-    return this.botstat.increaseCommandUsage(this.user.id, command)
+    if (!this.wrapper?.statistics) return Promise.resolve(this.logger.warn('API', 'Cannot upload command stats: API is disabled', command))
+    return this.wrapper.statistics.increaseCommandUsage(this.user.id, command)
       .then((result) => {
-        // eslint-disable-next-line no-console
-        // return console.debug(`Command has been updated: ${result.command} was used ${result.uses} times.`)
+        return this.logger.silly('BotStat', '[Upload]', `Command has been updated: ${result.command} was used ${result.uses} times.`)
       }).catch((err) => {
         return this.logger.error('BotStat', err)
       })
+  }
+
+  public stop () {
+    this.logger.warn('PROCESS', 'Received exit signal => quitting in 4 seconds...')
+    this.destroy()
+    this.updateStats()
+    this.counter.destroy()
+    setTimeout(() => {
+      this.logger.warn('PROCESS', 'Exit.')
+      process.exit(0)
+    }, 4000)
   }
 }

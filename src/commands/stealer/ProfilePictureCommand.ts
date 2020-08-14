@@ -22,12 +22,14 @@ export default class ProfilePictureCommand extends Command {
         ]
       },
       ratelimit: 3,
-      userPermissions: ['MANAGE_EMOJIS']
+      userPermissions: ['MANAGE_EMOJIS'],
+      clientPermissions: ['MANAGE_EMOJIS']
     })
     this.logger = WebhookLogger.instance
   }
 
   public async exec (message: Message): Promise<Message> {
+    if (!message.guild) return message.util.reply('This command can only work in servers.')
     const targetUser = message.mentions.users.first() || message.author
 
     // Download their PFP

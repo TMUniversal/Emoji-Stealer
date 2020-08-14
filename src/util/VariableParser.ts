@@ -1,3 +1,4 @@
+// tslint:disable: tsr-detect-non-literal-regexp
 import _ from 'lodash'
 
 export default class VariableParser {
@@ -11,7 +12,7 @@ export default class VariableParser {
    * @param {String} identifiers pair of variable identifiers. defaults to {}
    */
   public constructor (data: VariableParserData, identifiers: string = '{}') {
-    if (identifiers.length !== 2) throw new Error('"identifiers" is required to have a length of 2')
+    if (identifiers.length !== 2) throw new Error('"identifiers" must have a length of 2')
     this.data = data
     this.identifiers = identifiers
     this.match = new RegExp(`\\${this.identifiers[0]}\\w+\\${this.identifiers[1]}`, 'gu')
@@ -29,8 +30,8 @@ export default class VariableParser {
   public parse (input: string): string {
     let output = String(input)
     const vars = output.match(this.match)
-    if (vars?.length < 1) { return input }
-    vars?.forEach(element => {
+    if (!vars || !vars[0]) { return input }
+    vars.forEach(element => {
       const key = element.replace(this.identifierRegex, '')
       if (_.has(this.data, key)) {
         output = output.replace(`${this.identifiers[0]}${key}${this.identifiers[1]}`, this.data[key].toString())

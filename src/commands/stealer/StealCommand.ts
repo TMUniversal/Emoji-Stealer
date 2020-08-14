@@ -23,6 +23,7 @@ export default class StealCommand extends Command {
   }
 
   public async exec (message: Message): Promise<Message | void> {
+    if (!message.guild) return message.util.reply('This command can only work in servers.')
     return message.util.send(MessageEmbed.common({ author: message.author })
       .setTitle('Emoji Stealer')
       .setDescription('**To *steal* emojis, react to this message with any custom emojis** (this requires Discord Nitro).\n\n' +

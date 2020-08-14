@@ -8,5 +8,5 @@ const compressorOptions: BufferOptions = {
 }
 
 export default async function compress (data: Buffer): Promise<Buffer> {
-  return await imagemin.buffer(data, compressorOptions)
+  return imagemin.buffer(data, compressorOptions)
 }

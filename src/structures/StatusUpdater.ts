@@ -4,6 +4,7 @@ import { isUrl } from '../util/Validators'
 import BotClient from '../client/BotClient'
 import VariableParser from '../util/VariableParser'
 import Axios from 'axios'
+import { WebhookLogger } from './WebhookLogger'
 
 const defaultStatuses: Array<ActivityOptions> = [
   { type: 'PLAYING', name: 'with {users} users' },
@@ -16,11 +17,12 @@ const defaultStatuses: Array<ActivityOptions> = [
 ]
 
 export default class StatusUpdater {
-  private client: BotClient;
-  private parser: VariableParser;
-  public statusUrl?: string;
-  public statuses: ActivityOptions[];
-  private _statuses: ActivityOptions[];
+  private client: BotClient
+  private parser: VariableParser
+  public statusUrl?: string
+  private _statuses: ActivityOptions[]
+  private logger: WebhookLogger
+  private isReady: boolean
   /**
    * A status updater that can pull from the internet
    * @param {BotClient} client discord.js (extending) client
@@ -45,34 +47,70 @@ export default class StatusUpdater {
       } else if (_.isArray(statuses)) this._statuses = statuses
       else throw new Error('Invalid status options.')
     }
+
+    this.logger = WebhookLogger.instance
+
+    this.isReady = false
+
+    this._init()
   }
 
+  private async _init () {
+    this.logger.silly('StatusUpdater', 'Initializing Status Updater.')
+    this._getStatuses().then(() => {
+      this.isReady = true
+      this.logger.silly('StatusUpdater', 'Ready.')
+    }).catch(err => {
+      this.logger.error('StatusUpdater', err)
+    })
+  }
+
+  /**
+   * Try to download the latest ActivityOptions data.
+   */
   private async _getStatuses (): Promise<ActivityOptions[]> {
-    if (this._statuses) return this._statuses
-    else if (this.statusUrl) {
+    if (this.statusUrl) {
+      this.logger.silly('StatusUpdater', 'Attempting to download...')
       const statuses = await Axios.get(this.statusUrl)
       this._statuses = statuses.data
+      this.logger.silly('StatusUpdater', 'Download successful.')
       return this._statuses
-    } else return defaultStatuses
+    } else {
+      this.logger.warn('StatusUpdater', 'Something went wrong while downloading and/or parsing the data.')
+      return defaultStatuses
+    }
   }
 
-  private async getStatuses (): Promise<ActivityOptions[]> {
-    this.statuses = await this._getStatuses()
-    return this.statuses
+  /**
+   * Update the variable parser with the latest data from the client.
+   */
+  private _updateParserData () {
+    return this.parser.updateData({ users: this.client.users.cache.size, guilds: this.client.guilds.cache.size, channels: this.client.channels.cache.size })
+  }
+
+  /**
+   * An array of possible status messages (as ActivityOptions)
+   * @type ActivityOptions[]
+   */
+  public get statuses (): ActivityOptions[] {
+    // If the status download isn't done yet, serve the default statuses instead.
+    if (!this.isReady) return defaultStatuses
+    return this._statuses
   }
 
   /**
    * Trigger a status update
    * @returns {Promise<Presence>}
    */
-  public async updateStatus (activity?: ActivityOptions, shardId?: number): Promise<Presence> {
-    const $activity = activity || await this._chooseActivity()
+  public updateStatus (activity?: ActivityOptions, shardId?: number): Promise<Presence> {
+    this._updateParserData()
+    const $activity = activity || this._chooseActivity()
     if (shardId) $activity.shardID = shardId
     return this.client.user.setActivity($activity)
   }
 
-  private async _chooseActivity (): Promise<ActivityOptions> {
-    const info = (await this.getStatuses())[~~(Math.random() * this.statuses.length)]
+  private _chooseActivity (): ActivityOptions {
+    const info = this.statuses[~~(Math.random() * this.statuses.length)]
     const details: ActivityOptions = { ...info, type: info.type || 'PLAYING', name: this.parser.parse(info.name) || 'a game' }
 
     return details
