@@ -16,6 +16,7 @@
     "pfps",
     "printf",
     "ratelimit",
+    "setstatus",
     "startmon",
     "stealprofile",
     "upperbound"

@@ -8,7 +8,6 @@ import { WebhookLogger } from '../structures/WebhookLogger'
 import configFile from '../config'
 import appRootPath from 'app-root-path'
 import CustomEventEmitter from '../structures/CustomEventEmitter'
-import VariableParser from '../util/VariableParser'
 import StatusUpdater from '../structures/StatusUpdater'
 import Counter from '../structures/Counter'
 
@@ -21,7 +20,6 @@ declare module 'discord-akairo' {
     logger: WebhookLogger
     wrapper?: WeebWrapper
     dbl?: DBL
-    variableParser: VariableParser
     statusUpdater: StatusUpdater
     customEmitter: CustomEventEmitter
     counter: Counter
@@ -42,7 +40,6 @@ export default class BotClient extends AkairoClient implements AkairoClient {
   public wrapper?: WeebWrapper
   public dbl?: DBL
   public statusUpdater: StatusUpdater
-  public variableParser: VariableParser
   public logger: WebhookLogger
   public eventEmitter: CustomEventEmitter
   public counter: Counter
@@ -90,8 +87,7 @@ export default class BotClient extends AkairoClient implements AkairoClient {
     this.logger = WebhookLogger.instance
     this.eventEmitter = CustomEventEmitter.instance
     this.counter = Counter.instance
-    this.variableParser = new VariableParser({ website: 'tmuniversal.eu', prefix: configFile.prefix })
-    this.statusUpdater = new StatusUpdater(this, this.variableParser, 'https://pastebin.com/raw/UDWZ0eZZ')
+    this.statusUpdater = new StatusUpdater(this, 'https://gist.githubusercontent.com/TMUniversal/253bd3172c3002be3e15e1152dd31bd4/raw/emojiStealerStatuses.json')
 
     if (configFile.weebToken && configFile.weebToken?.length !== 0) {
       this.wrapper = new WeebWrapper(configFile.weebToken, 'https://api.tmuniversal.eu')

@@ -5,6 +5,8 @@ import BotClient from '../client/BotClient'
 import VariableParser from '../util/VariableParser'
 import Axios from 'axios'
 import { WebhookLogger } from './WebhookLogger'
+import config from '../config'
+import Counter from './Counter'
 
 const defaultStatuses: Array<ActivityOptions> = [
   { type: 'PLAYING', name: 'with {users} users' },
@@ -37,9 +39,9 @@ export default class StatusUpdater {
    *
    * @example const StatusUpdater = new StatusUpdater(client, parser, 'https://example.com/statuses.json')
    */
-  constructor (client: BotClient, parser: VariableParser, statuses?: ActivityOptions[] | string) {
+  constructor (client: BotClient, statuses?: ActivityOptions[] | string) {
     this.client = client
-    this.parser = parser
+    this.parser = new VariableParser({ website: 'tmuniversal.eu', prefix: config.prefix, version: config.version })
     if (statuses) {
       if (typeof statuses === 'string') {
         if (!isUrl(statuses)) throw new Error('Invalid statuses URL')
@@ -84,8 +86,9 @@ export default class StatusUpdater {
   /**
    * Update the variable parser with the latest data from the client.
    */
-  private _updateParserData () {
-    return this.parser.updateData({ users: this.client.users.cache.size, guilds: this.client.guilds.cache.size, channels: this.client.channels.cache.size })
+  private async _updateParserData () {
+    this.parser.updateData({ users: this.client.users.cache.size, guilds: this.client.guilds.cache.size, channels: this.client.channels.cache.size })
+    this.parser.updateData({ emojis: await this.client.counter.getEmojiCount(), pfps: await this.client.counter.getPfpCount() })
   }
 
   /**
@@ -104,15 +107,17 @@ export default class StatusUpdater {
    */
   public updateStatus (activity?: ActivityOptions, shardId?: number): Promise<Presence> {
     this._updateParserData()
-    const $activity = activity || this._chooseActivity()
+    const $activity = this.getSafeActivity(activity) || this._chooseActivity()
     if (shardId) $activity.shardID = shardId
     return this.client.user.setActivity($activity)
   }
 
   private _chooseActivity (): ActivityOptions {
-    const info = this.statuses[~~(Math.random() * this.statuses.length)]
-    const details: ActivityOptions = { ...info, type: info.type || 'PLAYING', name: this.parser.parse(info.name) || 'a game' }
+    return this.getSafeActivity(this.statuses[~~(Math.random() * this.statuses.length)])
+  }
 
-    return details
+  private getSafeActivity = (info: ActivityOptions): ActivityOptions => {
+    if (!info) return
+    return { ...info, type: info.type || 'PLAYING', name: this.parser.parse(info.name) || 'a game' }
   }
 }
