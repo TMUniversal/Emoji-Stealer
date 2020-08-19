@@ -26,7 +26,10 @@ declare module 'discord-akairo' {
 
     start (): Promise<BotClient>
     changeStatus (): Promise<Presence>
+    updateStats (): Promise<void>
     updateBotStats (guilds: number, channels: number, users: number): Promise<void>
+    logCommandToApi (command: string): Promise<void>
+    stop (): void
   }
 }
 
