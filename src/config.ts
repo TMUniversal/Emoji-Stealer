@@ -3,7 +3,7 @@ import { Snowflake } from 'discord.js'
 const file = require('../data.json')
 const pkg: PackageJson = require('../package.json')
 
-interface ConfigFile {
+export interface ConfigFile {
   version: string
   clientToken: string
   webhook: {
@@ -22,7 +22,7 @@ interface ConfigFile {
   }
 }
 
-interface PackageJson {
+export interface PackageJson {
   name: string
   version: string
   description: string
