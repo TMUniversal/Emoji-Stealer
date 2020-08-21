@@ -3,6 +3,7 @@ import { Message } from 'discord.js'
 import config from '../../config'
 import { MessageEmbed } from '../../structures/MessageEmbed'
 import moment from 'moment'
+import 'moment-duration-format'
 
 export default class StatCommand extends Command {
   public constructor () {
@@ -45,7 +46,7 @@ export default class StatCommand extends Command {
           value: `${data.guilds} Servers\n` +
             `With ${data.shards} Shards\n` +
             `Users: ${data.users}`,
-          inline: true
+          inline: false
         },
         {
           name: 'Uploads',
@@ -54,7 +55,7 @@ export default class StatCommand extends Command {
           inline: true
         }
       ])
-      .setFooter(`${this.client.user.username} Version ${data.version}`)
+      .setFooter(`${this.client.user.username} v${data.version}`)
       .setTimestamp()
     )
   }
@@ -73,7 +74,7 @@ export default class StatCommand extends Command {
     return {
       guilds: this.client.guilds.cache.size,
       users: this.client.users.cache.size,
-      uptime: moment.utc(this.client.uptime).format('DDD[d] HH[h] mm[m] ss[s]'),
+      uptime: moment.duration(this.client.uptime).format('D [days], H [hrs], m [mins], s [secs]'),
       emojisUploaded,
       stealCmdUses,
       pfpsUploaded,
