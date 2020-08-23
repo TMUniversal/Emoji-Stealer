@@ -2,8 +2,10 @@ import { Command } from 'discord-akairo'
 import { Message, MessageReaction, User, GuildEmoji } from 'discord.js'
 import axios from 'axios'
 import { MessageEmbed } from '../../structures/MessageEmbed'
+import { WebhookLogger } from '../../structures/WebhookLogger'
 
 export default class StealCommand extends Command {
+  private logger = WebhookLogger.instance
   public constructor () {
     super('steal', {
       aliases: ['steal'],
@@ -37,7 +39,10 @@ export default class StealCommand extends Command {
             for (const [, reaction] of reactions) {
               message.guild.emojis.create((await axios.get(reaction.emoji.url, { responseType: 'arraybuffer' })).data, reaction.emoji.name, { reason: `Requested by: ${message.author.tag} (${message.author.id})` })
                 .then(() => this.client.counter.updateEmojiCount())
-                .catch(() => message.channel.send('Could not upload emoji: ' + reaction.emoji.name))
+                .catch(() => {
+                  message.channel.send('Could not upload emoji: ' + reaction.emoji.name)
+                  this.logger.error('EMOJI UPLOAD', `Could not upload emoji: ${reaction.emoji.name} (${reaction.emoji.id})`)
+                })
             }
             return message.util.reply('done.')
           })
