@@ -83,7 +83,6 @@ export default class BotClient extends AkairoClient implements AkairoClient {
       ownerID: config.owners
     })
 
-    // eslint-disable-next-line no-console
     console.log('[Client]', 'Initializing...')
 
     this.config = config
@@ -139,7 +138,6 @@ export default class BotClient extends AkairoClient implements AkairoClient {
   }
 
   public async start (): Promise<BotClient> {
-    // eslint-disable-next-line no-console
     console.log('[Bot]', 'Starting up...')
     await this._init()
     await this.login(this.config.token)
