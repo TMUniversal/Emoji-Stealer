@@ -9,7 +9,7 @@ import configFile from '../config'
 import appRootPath from 'app-root-path'
 import CustomEventEmitter from '../structures/CustomEventEmitter'
 import StatusUpdater from '../structures/StatusUpdater'
-import Counter from '../structures/Counter'
+import CounterManager from '../structures/CounterManager'
 
 declare module 'discord-akairo' {
   interface AkairoClient {
@@ -22,7 +22,7 @@ declare module 'discord-akairo' {
     dbl?: DBL
     statusUpdater: StatusUpdater
     customEmitter: CustomEventEmitter
-    counter: Counter
+    counter: CounterManager
 
     start (): Promise<BotClient>
     changeStatus (): Promise<Presence>
@@ -45,7 +45,7 @@ export default class BotClient extends AkairoClient implements AkairoClient {
   public statusUpdater: StatusUpdater
   public logger: WebhookLogger
   public eventEmitter: CustomEventEmitter
-  public counter: Counter
+  public counter: CounterManager
 
   public listenerHandler: ListenerHandler = new ListenerHandler(this, {
     directory: path.join(__dirname, '..', 'events')
@@ -59,9 +59,9 @@ export default class BotClient extends AkairoClient implements AkairoClient {
     directory: path.join(__dirname, '..', 'commands'),
     prefix: configFile.prefix,
     allowMention: true,
-    handleEdits: true,
+    handleEdits: false,
     commandUtil: true,
-    commandUtilLifetime: 2 * 60 * 1000,
+    commandUtilLifetime: 1.5 * 60 * 1000,
     defaultCooldown: 6e3,
     argumentDefaults: {
       prompt: {
@@ -88,7 +88,7 @@ export default class BotClient extends AkairoClient implements AkairoClient {
     this.config = config
     this.logger = WebhookLogger.instance
     this.eventEmitter = CustomEventEmitter.instance
-    this.counter = Counter.instance
+    this.counter = CounterManager.instance
     this.statusUpdater = new StatusUpdater(this, 'https://gist.githubusercontent.com/TMUniversal/253bd3172c3002be3e15e1152dd31bd4/raw/emojiStealerStatuses.json')
 
     if (configFile.weebToken && configFile.weebToken?.length !== 0) {
