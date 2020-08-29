@@ -6,7 +6,7 @@ import VariableParser from '../util/VariableParser'
 import Axios from 'axios'
 import { WebhookLogger } from './WebhookLogger'
 import config from '../config'
-import Counter from './Counter'
+import Counter from './CounterManager'
 
 const defaultStatuses: Array<ActivityOptions> = [
   { type: 'PLAYING', name: 'with {users} users' },

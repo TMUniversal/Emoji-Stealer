@@ -2,8 +2,10 @@ import { Command } from 'discord-akairo'
 import { Message, MessageReaction, User, GuildEmoji } from 'discord.js'
 import axios from 'axios'
 import { MessageEmbed } from '../../structures/MessageEmbed'
+import { WebhookLogger } from '../../structures/WebhookLogger'
 
 export default class StealCommand extends Command {
+  private logger = WebhookLogger.instance
   public constructor () {
     super('steal', {
       aliases: ['steal'],
@@ -30,16 +32,17 @@ export default class StealCommand extends Command {
           'I will give you 30 seconds to choose, then upload your chosen custom emojis to this guild.'))
       .then(async m => {
         // Collect reactions
-        return m.awaitReactions(this.filter, { time: 35000 })
+        return m.awaitReactions(this.filter, { time: 32500 })
           .then(async collected => {
             const reactions = collected.filter(emoji => emoji.users.cache.has(message.author.id))
             if (reactions.size < 1) return message.util.reply('you\'re supposed to add custom emojis... Please try again...')
             for (const [, reaction] of reactions) {
-              const response = await axios.get(reaction.emoji.url, { responseType: 'arraybuffer' })
-              const image = Buffer.from(response.data, 'utf-8')
-              message.guild.emojis.create(image, reaction.emoji.name, { reason: `Requested by: ${message.author.tag} (${message.author.id})` })
+              message.guild.emojis.create((await axios.get(reaction.emoji.url, { responseType: 'arraybuffer' })).data, reaction.emoji.name, { reason: `Requested by: ${message.author.tag} (${message.author.id})` })
                 .then(() => this.client.counter.updateEmojiCount())
-                .catch(() => message.channel.send('Could not upload emoji: ' + reaction.emoji.name))
+                .catch(() => {
+                  message.channel.send('Could not upload emoji: ' + reaction.emoji.name)
+                  this.logger.error('EMOJI UPLOAD', `Could not upload emoji: ${reaction.emoji.name} (${reaction.emoji.id})`)
+                })
             }
             return message.util.reply('done.')
           })
