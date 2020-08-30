@@ -2,12 +2,14 @@
 .vscode
 logs
 node_modules
+scripts
+.dockerignore
 .editorconfig
 .gitattributes
 .gitignore
+data.example.json
+Dockerfile
 LICENSE.md
 pm2-start.json
 README.md
-start.sh
 tslint.json
-update.sh

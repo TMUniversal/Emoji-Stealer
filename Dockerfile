@@ -1,17 +1,11 @@
-FROM node:14
+FROM node:latest
 
 WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install
+RUN npm install --production
 
 COPY . .
-
-RUN npm run build
-
-RUN rm -rf node_modules
-
-RUN npm install --production
 
 CMD [ "npm", "start" ]
