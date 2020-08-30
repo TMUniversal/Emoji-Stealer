@@ -49,7 +49,7 @@
     "rimraf": "^3.0.2",
     "ts-node-dev": "^1.0.0-pre.59",
     "tslint": "^6.1.3",
-    "typescript": "^3.9.7"
+    "typescript": "^4.0.2"
   },
   "repository": {
     "type": "git",
