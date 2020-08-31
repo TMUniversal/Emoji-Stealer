@@ -69,7 +69,7 @@ export default class CounterManager {
     this.eventEmitter.emit('ready')
   }
 
-  public async getEmojiCount () {
+  public async getEmojiCount (): Promise<number> {
     try {
       return (await countapi.get(config.counter.namespace, config.counter.emojiKey)).value
     } catch (err) {
@@ -78,7 +78,7 @@ export default class CounterManager {
     }
   }
 
-  public async getPfpCount () {
+  public async getPfpCount (): Promise<number> {
     try {
       return (await countapi.get(config.counter.namespace, config.counter.pfpKey)).value
     } catch (err) {
