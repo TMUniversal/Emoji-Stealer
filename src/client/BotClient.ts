@@ -160,6 +160,7 @@ export default class BotClient extends AkairoClient implements AkairoClient {
 
   // Function for (randomized) status changes
   public async changeStatus (options?: ActivityOptions): Promise<Presence> {
+    this.statusUpdater.updateParserData({ emojis: await this.counter.getEmojiCount(), pfps: await this.counter.getPfpCount() })
     if (options) return this.statusUpdater.updateStatus(options)
     return this.statusUpdater.updateStatus()
   }
