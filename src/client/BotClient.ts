@@ -8,7 +8,7 @@ import { WebhookLogger } from '../structures/WebhookLogger'
 import configFile from '../config'
 import appRootPath from 'app-root-path'
 import CustomEventEmitter from '../structures/CustomEventEmitter'
-import StatusUpdater from '../structures/StatusUpdater'
+import StatusUpdater from '@tmware/status-rotate'
 import CounterManager from '../structures/CounterManager'
 
 declare module 'discord-akairo' {
@@ -90,6 +90,7 @@ export default class BotClient extends AkairoClient implements AkairoClient {
     this.eventEmitter = CustomEventEmitter.instance
     this.counter = CounterManager.instance
     this.statusUpdater = new StatusUpdater(this, 'https://gist.githubusercontent.com/TMUniversal/253bd3172c3002be3e15e1152dd31bd4/raw/emojiStealerStatuses.json')
+    this.statusUpdater.updateParserData({ website: 'tmuniversal.eu', prefix: configFile.prefix, version: configFile.version })
 
     if (configFile.weebToken && configFile.weebToken?.length !== 0) {
       this.wrapper = new WeebWrapper(configFile.weebToken, 'https://api.tmuniversal.eu')

@@ -21,6 +21,7 @@
   "dependencies": {
     "@tmuniversal/counter": "^1.0.2",
     "@tmuniversal/weeb-wrapper": "^0.3.1",
+    "@tmware/status-rotate": "^1.0.1",
     "app-root-path": "^3.0.0",
     "axios": "^0.19.2",
     "countapi-js": "^1.0.1",
