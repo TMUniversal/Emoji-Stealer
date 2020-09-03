@@ -14,6 +14,13 @@ export enum LogLevel {
   SILLY
 }
 
+export interface IColor {
+  /**
+   * [background, foreground]
+   */
+  [index: number]: [number, number, ColorResolvable]
+}
+
 export const colors: IColor = {
   [LogLevel.ERROR]: [41, 31, 'RED'],
   [LogLevel.WARN]: [43, 33, 0xFFFF00],
@@ -25,11 +32,4 @@ export const colors: IColor = {
    * Won't be logged, just here for completeness
    */
   [LogLevel.NONE]: [0, 0, 0]
-}
-
-export interface IColor {
-  /**
-   * [background, foreground]
-   */
-  [index: number]: [number, number, ColorResolvable]
 }

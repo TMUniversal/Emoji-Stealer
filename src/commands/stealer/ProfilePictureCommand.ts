@@ -4,7 +4,7 @@ import axios from 'axios'
 import { MessageEmbed } from '../../structures/MessageEmbed'
 import compress from '../../util/ImageCompressor'
 import { WebhookLogger } from '../../structures/WebhookLogger'
-import { validEmojiName } from '../../util/Validators'
+import { validators } from '@tmware/jitsuyo'
 
 export default class ProfilePictureCommand extends Command {
   logger: WebhookLogger
@@ -39,7 +39,7 @@ export default class ProfilePictureCommand extends Command {
 
     const image = await compress(pfp)
 
-    const emojiName = validEmojiName(targetUser.username)
+    const emojiName = validators.getValidEmojiName(targetUser.username)
 
     message.util.send({ content: `Uploading the following image as \`${emojiName}\`${emojiName === 'invalid_name' ? `, because ${targetUser.username} is not a valid name for an emoji.` : ''}:`, files: [new MessageAttachment(image)] })
 

@@ -1,4 +1,4 @@
-// tslint:disable: no-floating-promises
+/* eslint-disable no-console */
 import { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler } from 'discord-akairo'
 import { User, Message, ActivityType, ActivityOptions, Presence } from 'discord.js'
 import WeebWrapper from '@tmuniversal/weeb-wrapper'
@@ -11,29 +11,7 @@ import CustomEventEmitter from '../structures/CustomEventEmitter'
 import StatusUpdater from '@tmware/status-rotate'
 import CounterManager from '../structures/CounterManager'
 
-declare module 'discord-akairo' {
-  interface AkairoClient {
-    commandHandler: CommandHandler
-    listenerHandler: ListenerHandler
-    inhibitorHandler: InhibitorHandler
-    config: BotOptions
-    logger: WebhookLogger
-    wrapper?: WeebWrapper
-    dbl?: DBL
-    statusUpdater: StatusUpdater
-    customEmitter: CustomEventEmitter
-    counter: CounterManager
-
-    start (): Promise<BotClient>
-    changeStatus (): Promise<Presence>
-    updateStats (): Promise<void>
-    updateBotStats (guilds: number, channels: number, users: number): Promise<void>
-    logCommandToApi (command: string): Promise<void>
-    stop (): void
-  }
-}
-
-interface BotOptions {
+export interface BotOptions {
   token?: string
   owners?: string | string[]
 }

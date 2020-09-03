@@ -1,7 +1,5 @@
 import { join } from 'path'
 import { Snowflake } from 'discord.js'
-const file = require('../data.json')
-const pkg: PackageJson = require('../package.json')
 
 export interface ConfigFile {
   version: string
@@ -49,6 +47,9 @@ export interface PackageJson {
   }
   homepage?: string
 }
+
+const file = require('../data.json')
+const pkg: PackageJson = require('../package.json')
 
 const config: ConfigFile = { version: pkg.version, ...file }
 

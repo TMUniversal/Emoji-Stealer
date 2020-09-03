@@ -17,6 +17,7 @@ export default class CounterManager {
   private logger: WebhookLogger
   private emojiCounter: Counter
   private pfpCounter: Counter
+  // eslint-disable-next-line no-undef
   private updateInterval: NodeJS.Timeout
 
   public static get instance (): CounterManager {
