@@ -58,7 +58,12 @@ export default class BotClient extends AkairoClient implements AkairoClient {
 
   public constructor (config: BotOptions) {
     super({
-      ownerID: config.owners
+      ownerID: config.owners,
+      shards: 'auto',
+      presence: {
+        status: 'idle',
+        activity: { name: 'Starting up...', type: 'PLAYING' }
+      }
     })
 
     console.log('[Client]', 'Initializing...')
@@ -125,9 +130,6 @@ export default class BotClient extends AkairoClient implements AkairoClient {
     this.eventEmitter.on('updateStats', () => this.updateStats())
     this.eventEmitter.on('logCommand', command => this.logCommandToApi(command))
     this.eventEmitter.on('changeStatus', () => this.changeStatus())
-
-    // Set a startup notice. This will be overridden upon ready.
-    this.user.setActivity({ name: 'Starting up...', type: 'PLAYING' })
 
     // Automate status changes and upload stat uploads.
     this.setInterval(() => this.eventEmitter.emit('changeStatus'), 5 * 60 * 1000) // every five minutes
