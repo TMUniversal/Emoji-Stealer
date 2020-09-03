@@ -59,7 +59,6 @@ export default class BotClient extends AkairoClient implements AkairoClient {
   public constructor (config: BotOptions) {
     super({
       ownerID: config.owners,
-      shards: 'auto',
       presence: {
         status: 'idle',
         activity: { name: 'Starting up...', type: 'PLAYING' }
