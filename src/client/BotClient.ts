@@ -145,13 +145,13 @@ export default class BotClient extends AkairoClient implements AkairoClient {
   }
 
   public async updateStats () {
-    if (this.wrapper?.statistics) this.updateBotStats(this.guilds.cache.size, this.channels.cache.size, this.users.cache.size)
+    if (this.wrapper) this.updateBotStats(this.guilds.cache.size, this.channels.cache.size, this.users.cache.size)
     if (this.dbl) this.dbl.postStats(this.guilds.cache.size)
   }
 
   // Upload user stats to api
   public async updateBotStats (guilds: number, channels: number, users: number) {
-    if (!this.wrapper?.statistics) return Promise.resolve(this.logger.warn('API', 'Cannot upload bot stats: API is disabled'))
+    if (!this.wrapper) return Promise.resolve(this.logger.warn('API', 'Cannot upload bot stats: API is disabled'))
     return this.wrapper.statistics.updateBot(this.user.id, guilds, channels, users)
       .then((r) => {
         return this.logger.silly('BotStat', '[Upload]', `Uploaded user base stats to API: ${r.guilds} guilds, ${r.channels} channels, ${r.users} users.`)
@@ -161,7 +161,7 @@ export default class BotClient extends AkairoClient implements AkairoClient {
 
   // Upload command usage stats to api
   public async logCommandToApi (command: string) {
-    if (!this.wrapper?.statistics) return Promise.resolve(this.logger.warn('API', 'Cannot upload command stats: API is disabled', command))
+    if (!this.wrapper) return Promise.resolve(this.logger.warn('API', 'Cannot upload command stats: API is disabled', command))
     return this.wrapper.statistics.increaseCommandUsage(this.user.id, command)
       .then((result) => {
         return this.logger.silly('BotStat', '[Upload]', `Command has been updated: ${result.command} was used ${result.uses} times.`)
