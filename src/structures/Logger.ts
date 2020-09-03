@@ -10,10 +10,6 @@ import { colors, LogLevel } from '../types/LogLevel'
 export { Loggable } from '../decorators/LoggerDecorator'
 
 type LevelFunctions = 'silly' | 'debug' | 'verbose' | 'info' | 'warn' | 'error'
-/**
- * A logger, except that the logging functions do not accept a tag anymore.
- */
-export type AttachedLogger = Omit<Logger, LevelFunctions> & Record<LevelFunctions, (...input: any[]) => Promise<void>>
 
 /**
  * Singleton Logger
@@ -154,6 +150,7 @@ export class Logger {
     this._capture(level, tag, cleaned)
 
     if (this._logLevel < level) return
+    // eslint-disable-next-line no-undef
     const out: NodeJS.WritableStream = level > LogLevel.WARN
       ? process.stdout
       : process.stderr
@@ -183,3 +180,8 @@ export class Logger {
     )
   }
 }
+
+/**
+ * A logger, except that the logging functions do not accept a tag anymore.
+ */
+export type AttachedLogger = Omit<Logger, LevelFunctions> & Record<LevelFunctions, (...input: any[]) => Promise<void>>

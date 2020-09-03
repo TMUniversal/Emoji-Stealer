@@ -4,8 +4,10 @@ import config from '../../config'
 import { MessageEmbed } from '../../structures/MessageEmbed'
 import moment from 'moment'
 import 'moment-duration-format'
+import { WebhookLogger } from '../../structures/WebhookLogger'
 
 export default class StatCommand extends Command {
+  logger = WebhookLogger.instance
   public constructor () {
     super('stats', {
       aliases: ['stats', 'statistics', 'metrics'],
@@ -69,7 +71,7 @@ export default class StatCommand extends Command {
       stealCmdUses = (await this.client.wrapper?.statistics.getCommand(this.client.user.id, 'steal'))?.uses
       pfpsUploaded = await this.client.counter.getPfpCount()
     } catch (err) {
-      console.error(err)
+      this.logger.error('Command', 'Stat', err)
     }
     return {
       guilds: this.client.guilds.cache.size,

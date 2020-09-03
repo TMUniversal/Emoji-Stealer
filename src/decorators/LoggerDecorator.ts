@@ -1,3 +1,4 @@
+/* eslint-disable no-redeclare */
 /**
  * @author Hydractify
  * @see https://github.com/Hydractify/kanna_kobayashi

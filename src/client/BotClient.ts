@@ -1,4 +1,4 @@
-// tslint:disable: no-floating-promises
+/* eslint-disable no-console */
 import { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler } from 'discord-akairo'
 import { User, Message, ActivityType, ActivityOptions, Presence } from 'discord.js'
 import WeebWrapper from '@tmuniversal/weeb-wrapper'
@@ -8,32 +8,10 @@ import { WebhookLogger } from '../structures/WebhookLogger'
 import configFile from '../config'
 import appRootPath from 'app-root-path'
 import CustomEventEmitter from '../structures/CustomEventEmitter'
-import StatusUpdater from '../structures/StatusUpdater'
+import StatusUpdater from '@tmware/status-rotate'
 import CounterManager from '../structures/CounterManager'
 
-declare module 'discord-akairo' {
-  interface AkairoClient {
-    commandHandler: CommandHandler
-    listenerHandler: ListenerHandler
-    inhibitorHandler: InhibitorHandler
-    config: BotOptions
-    logger: WebhookLogger
-    wrapper?: WeebWrapper
-    dbl?: DBL
-    statusUpdater: StatusUpdater
-    customEmitter: CustomEventEmitter
-    counter: CounterManager
-
-    start (): Promise<BotClient>
-    changeStatus (): Promise<Presence>
-    updateStats (): Promise<void>
-    updateBotStats (guilds: number, channels: number, users: number): Promise<void>
-    logCommandToApi (command: string): Promise<void>
-    stop (): void
-  }
-}
-
-interface BotOptions {
+export interface BotOptions {
   token?: string
   owners?: string | string[]
 }
@@ -90,6 +68,7 @@ export default class BotClient extends AkairoClient implements AkairoClient {
     this.eventEmitter = CustomEventEmitter.instance
     this.counter = CounterManager.instance
     this.statusUpdater = new StatusUpdater(this, 'https://gist.githubusercontent.com/TMUniversal/253bd3172c3002be3e15e1152dd31bd4/raw/emojiStealerStatuses.json')
+    this.statusUpdater.updateParserData({ website: 'tmuniversal.eu', prefix: configFile.prefix, version: configFile.version })
 
     if (configFile.weebToken && configFile.weebToken?.length !== 0) {
       this.wrapper = new WeebWrapper(configFile.weebToken, 'https://api.tmuniversal.eu')
@@ -159,6 +138,7 @@ export default class BotClient extends AkairoClient implements AkairoClient {
 
   // Function for (randomized) status changes
   public async changeStatus (options?: ActivityOptions): Promise<Presence> {
+    this.statusUpdater.updateParserData({ emojis: await this.counter.getEmojiCount(), pfps: await this.counter.getPfpCount() })
     if (options) return this.statusUpdater.updateStatus(options)
     return this.statusUpdater.updateStatus()
   }
