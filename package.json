@@ -1,6 +1,6 @@
 {
   "name": "emoji-stealer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Copy another discord server's emojis.",
   "main": "build/index.js",
   "scripts": {
