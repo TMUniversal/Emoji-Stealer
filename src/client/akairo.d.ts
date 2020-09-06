@@ -1,5 +1,5 @@
 import { CommandHandler, ListenerHandler, InhibitorHandler } from 'discord-akairo'
-import { Presence } from 'discord.js'
+import { Presence, Collection, Message, Snowflake } from 'discord.js'
 import { WebhookLogger } from '../structures/WebhookLogger'
 import CustomEventEmitter from '../structures/CustomEventEmitter'
 import StatusUpdater from '@tmware/status-rotate'
@@ -20,6 +20,7 @@ declare module 'discord-akairo' {
     statusUpdater: StatusUpdater
     customEmitter: CustomEventEmitter
     counter: CounterManager
+    activeStealCommands: Collection<Snowflake, Message>
 
     start (): Promise<BotClient>
     changeStatus (): Promise<Presence>

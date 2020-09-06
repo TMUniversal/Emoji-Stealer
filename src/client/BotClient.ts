@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler } from 'discord-akairo'
-import { User, Message, ActivityType, ActivityOptions, Presence } from 'discord.js'
+import { User, Message, ActivityType, ActivityOptions, Presence, Collection, Snowflake } from 'discord.js'
 import WeebWrapper from '@tmuniversal/weeb-wrapper'
 import * as path from 'path'
 import DBL from 'dblapi.js'
@@ -56,9 +56,18 @@ export default class BotClient extends AkairoClient implements AkairoClient {
     ignorePermissions: configFile.owners
   })
 
+  /**
+   * Collection of all messages that initiated a 'steal' command
+   */
+  public activeStealCommands = new Collection<Snowflake, Message>()
+
   public constructor (config: BotOptions) {
     super({
-      ownerID: config.owners
+      ownerID: config.owners,
+      presence: {
+        status: 'idle',
+        activity: { name: 'Starting up...', type: 'PLAYING' }
+      }
     })
 
     console.log('[Client]', 'Initializing...')
@@ -126,9 +135,6 @@ export default class BotClient extends AkairoClient implements AkairoClient {
     this.eventEmitter.on('logCommand', command => this.logCommandToApi(command))
     this.eventEmitter.on('changeStatus', () => this.changeStatus())
 
-    // Set a startup notice. This will be overridden upon ready.
-    this.user.setActivity({ name: 'Starting up...', type: 'PLAYING' })
-
     // Automate status changes and upload stat uploads.
     this.setInterval(() => this.eventEmitter.emit('changeStatus'), 5 * 60 * 1000) // every five minutes
     this.setInterval(() => this.eventEmitter.emit('updateStats'), 20 * 60 * 1000) // every twenty minutes
@@ -144,13 +150,13 @@ export default class BotClient extends AkairoClient implements AkairoClient {
   }
 
   public async updateStats () {
-    if (this.wrapper?.statistics) this.updateBotStats(this.guilds.cache.size, this.channels.cache.size, this.users.cache.size)
+    if (this.wrapper) this.updateBotStats(this.guilds.cache.size, this.channels.cache.size, this.users.cache.size)
     if (this.dbl) this.dbl.postStats(this.guilds.cache.size)
   }
 
   // Upload user stats to api
   public async updateBotStats (guilds: number, channels: number, users: number) {
-    if (!this.wrapper?.statistics) return Promise.resolve(this.logger.warn('API', 'Cannot upload bot stats: API is disabled'))
+    if (!this.wrapper) return Promise.resolve(this.logger.warn('API', 'Cannot upload bot stats: API is disabled'))
     return this.wrapper.statistics.updateBot(this.user.id, guilds, channels, users)
       .then((r) => {
         return this.logger.silly('BotStat', '[Upload]', `Uploaded user base stats to API: ${r.guilds} guilds, ${r.channels} channels, ${r.users} users.`)
@@ -160,7 +166,7 @@ export default class BotClient extends AkairoClient implements AkairoClient {
 
   // Upload command usage stats to api
   public async logCommandToApi (command: string) {
-    if (!this.wrapper?.statistics) return Promise.resolve(this.logger.warn('API', 'Cannot upload command stats: API is disabled', command))
+    if (!this.wrapper) return Promise.resolve(this.logger.warn('API', 'Cannot upload command stats: API is disabled', command))
     return this.wrapper.statistics.increaseCommandUsage(this.user.id, command)
       .then((result) => {
         return this.logger.silly('BotStat', '[Upload]', `Command has been updated: ${result.command} was used ${result.uses} times.`)

@@ -1,21 +1,21 @@
 {
   "name": "emoji-stealer",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "Copy another discord server's emojis.",
   "main": "build/index.js",
   "scripts": {
     "commit": "npx git-cz",
     "start": "node .",
-    "cs": "npm run build && node .",
-    "build": "npm run clean && npm run build:ts",
+    "cs": "yarn run build && yarn start",
+    "build": "yarn run clean && yarn run build:ts",
     "build:ts": "tsc -p ./",
-    "test": "npm run lint",
+    "test": "yarn run lint",
     "startmon": "ts-node-dev --respawn ./src/index.ts",
     "lint": "eslint --ext .js,.ts --ignore-path .gitignore src/",
-    "lint:fix": "npm run lint --fix",
+    "lint:fix": "yarn run lint --fix",
     "watch": "tsc -w -p ./",
     "clean": "rimraf ./build && mkdir build",
-    "preversion": "npm run test",
+    "preversion": "yarn test",
     "postversion": "git push && git push --tags"
   },
   "dependencies": {
@@ -83,8 +83,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint:fix && npm run lint",
-      "pre-push": "npm run test"
+      "pre-commit": "yarn run lint:fix && yarn run lint",
+      "pre-push": "yarn test"
     }
   }
 }

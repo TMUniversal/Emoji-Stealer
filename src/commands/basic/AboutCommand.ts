@@ -1,6 +1,7 @@
 import { Command } from 'discord-akairo'
 import { Message } from 'discord.js'
 import { MessageEmbed } from '../../structures/MessageEmbed'
+import config from '../../config'
 const pkg = require('../../../package.json')
 
 export default class PingCommand extends Command {
@@ -62,7 +63,7 @@ export default class PingCommand extends Command {
       timestamp: new Date(),
       footer: {
         icon_url: this.client.user.avatarURL({ dynamic: true }),
-        text: 'Emoji Stealer by TMUniversal (MIT License)'
+        text: `${this.client.user.username} v${config.version}`
       }
     }))
   }
