@@ -3,6 +3,7 @@ import { Message, MessageReaction, User, GuildEmoji } from 'discord.js'
 import axios from 'axios'
 import { MessageEmbed } from '../../structures/MessageEmbed'
 import { WebhookLogger } from '../../structures/WebhookLogger'
+import { toDiscordMarkdownLink } from '../../util/commonFunctions'
 
 export default class StealCommand extends Command {
   private logger = WebhookLogger.instance
@@ -37,7 +38,8 @@ export default class StealCommand extends Command {
   }
 
   public async exec (message: Message, args: { time: number }): Promise<Message | void> {
-    if (!message.guild) return message.util.reply('This command can only work in servers.')
+    const doInhibit = this.inhibit(message)
+    if (doInhibit !== false) return doInhibit()
     const time = (args.time >= 10 && args.time <= 270) ? args.time * 1000 : 32 * 1000
     return message.util.send(MessageEmbed.common({ author: message.author })
       .setTitle('Emoji Stealer')
@@ -63,6 +65,22 @@ export default class StealCommand extends Command {
           .catch(() => { return message.util.reply('Something\'s not right, I can feel it.') })
           .finally(() => this.client.activeStealCommands.delete(message.id))
       })
+  }
+
+  /**
+   * Conditions under which the command should not be executed.
+   * If none are met, continue.
+   * Otherwise send a message justifying why the command won't be executed.
+   * @param {Message} message The commands message
+   */
+  private inhibit (message: Message) {
+    if (!message.guild) {
+      return () => message.util.reply('This command can only work in servers.')
+    }
+    if (this.client.activeStealCommands.filter(cmd => cmd.guild.id === message.guild.id && cmd.author.id === message.author.id).size !== 0) {
+      return () => message.channel.send('You are already doing that. Please wait until your last menu completes!')
+    }
+    return false
   }
 
   private filter (reaction: MessageReaction, user: User): boolean {
