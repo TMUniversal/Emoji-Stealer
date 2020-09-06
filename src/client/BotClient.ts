@@ -67,7 +67,9 @@ export default class BotClient extends AkairoClient implements AkairoClient {
       presence: {
         status: 'idle',
         activity: { name: 'Starting up...', type: 'PLAYING' }
-      }
+      },
+      messageCacheLifetime: 600,
+      messageSweepInterval: 1200
     })
 
     console.log('[Client]', 'Initializing...')
