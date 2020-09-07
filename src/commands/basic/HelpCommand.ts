@@ -2,6 +2,7 @@ import { Command } from 'discord-akairo'
 import { User, Message, Collection } from 'discord.js'
 import { MessageEmbed } from '../../structures/MessageEmbed'
 import { markdownCodifyArray } from '../../util/commonFunctions'
+import config from '../../config'
 
 export default class HelpCommand extends Command {
   public constructor () {
@@ -33,7 +34,7 @@ export default class HelpCommand extends Command {
     if (!command || command?.length === 0) {
       const helpEmbed = new MessageEmbed()
         .setTitle(this.client.user.username + ' Command List')
-        .setFooter(this.client.user.username)
+        .setFooter(`${this.client.user.username} v${config.version}`)
         .setTimestamp()
 
       for (const [id, category] of this.client.commandHandler.categories) {
@@ -55,7 +56,7 @@ export default class HelpCommand extends Command {
         .addField('Aliases', markdownCodifyArray(cmd.aliases), true)
         .addField('Usage', `\`${cmd.description.usage}\``, true)
         .addField('Examples', markdownCodifyArray(cmd.description.examples, '\n'))
-        .setFooter(this.client.user.username)
+        .setFooter(`${this.client.user.username} v${config.version}`)
         .setTimestamp()
 
       return message.util.send(embed)

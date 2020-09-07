@@ -3,6 +3,7 @@ import { Message, MessageReaction, User, GuildEmoji } from 'discord.js'
 import axios from 'axios'
 import { MessageEmbed } from '../../structures/MessageEmbed'
 import { WebhookLogger } from '../../structures/WebhookLogger'
+import { toDiscordMarkdownLink } from '../../util/commonFunctions'
 
 export default class StealCommand extends Command {
   private logger = WebhookLogger.instance
@@ -12,11 +13,23 @@ export default class StealCommand extends Command {
       category: 'emoji stealer',
       description: {
         content: 'Steal emojis by reacting with them.',
-        usage: 'steal',
+        usage: 'steal [time]',
         examples: [
-          'steal'
+          'steal',
+          'steal 10',
+          'steal 270'
         ]
       },
+      args: [
+        {
+          id: 'time',
+          default: 32,
+          type: 'number',
+          description: 'How long the menu stays open (between 10 seconds and 3 minutes)',
+          limit: 1,
+          match: 'phrase'
+        }
+      ],
       ratelimit: 3,
       typing: true,
       userPermissions: ['MANAGE_EMOJIS'],
@@ -24,15 +37,18 @@ export default class StealCommand extends Command {
     })
   }
 
-  public async exec (message: Message): Promise<Message | void> {
-    if (!message.guild) return message.util.reply('This command can only work in servers.')
+  public async exec (message: Message, args: { time: number }): Promise<Message | void> {
+    const doInhibit = this.inhibit(message)
+    if (doInhibit !== false) return doInhibit()
+    const time = (args.time >= 10 && args.time <= 270) ? args.time * 1000 : 32 * 1000
     return message.util.send(MessageEmbed.common({ author: message.author })
       .setTitle('Emoji Stealer')
-      .setDescription('**To *steal* emojis, react to this message with any custom emojis** (this requires Discord Nitro).\n\n' +
-          'I will give you 30 seconds to choose, then upload your chosen custom emojis to this guild.'))
+      .setDescription('**To *steal* emojis, react to this message with any custom emojis** (this requires Discord Nitro).')
+      .addField('\u200b', `I will give you ${time / 1000} seconds to choose, then upload your chosen custom emojis to this guild.`))
       .then(async m => {
+        this.client.activeStealCommands.set(message.id, message)
         // Collect reactions
-        return m.awaitReactions(this.filter, { time: 32500 })
+        return m.awaitReactions(this.filter, { time })
           .then(async collected => {
             const reactions = collected.filter(emoji => emoji.users.cache.has(message.author.id))
             if (reactions.size < 1) return message.util.reply('you\'re supposed to add custom emojis... Please try again...')
@@ -47,7 +63,24 @@ export default class StealCommand extends Command {
             return message.util.reply('done.')
           })
           .catch(() => { return message.util.reply('Something\'s not right, I can feel it.') })
+          .finally(() => this.client.activeStealCommands.delete(message.id))
       })
+  }
+
+  /**
+   * Conditions under which the command should not be executed.
+   * If none are met, continue.
+   * Otherwise send a message justifying why the command won't be executed.
+   * @param {Message} message The commands message
+   */
+  private inhibit (message: Message) {
+    if (!message.guild) {
+      return () => message.util.reply('This command can only work in servers.')
+    }
+    if (this.client.activeStealCommands.filter(cmd => cmd.guild.id === message.guild.id && cmd.author.id === message.author.id).size !== 0) {
+      return () => message.channel.send('You are already doing that. Please wait until your last menu completes!')
+    }
+    return false
   }
 
   private filter (reaction: MessageReaction, user: User): boolean {

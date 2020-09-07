@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler } from 'discord-akairo'
-import { User, Message, ActivityType, ActivityOptions, Presence } from 'discord.js'
+import { User, Message, ActivityType, ActivityOptions, Presence, Collection, Snowflake } from 'discord.js'
 import WeebWrapper from '@tmuniversal/weeb-wrapper'
 import * as path from 'path'
 import DBL from 'dblapi.js'
@@ -56,13 +56,20 @@ export default class BotClient extends AkairoClient implements AkairoClient {
     ignorePermissions: configFile.owners
   })
 
+  /**
+   * Collection of all messages that initiated a 'steal' command
+   */
+  public activeStealCommands = new Collection<Snowflake, Message>()
+
   public constructor (config: BotOptions) {
     super({
       ownerID: config.owners,
       presence: {
         status: 'idle',
         activity: { name: 'Starting up...', type: 'PLAYING' }
-      }
+      },
+      messageCacheLifetime: 600,
+      messageSweepInterval: 1200
     })
 
     console.log('[Client]', 'Initializing...')
