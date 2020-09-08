@@ -1,4 +1,5 @@
 # Emoji Stealer
+
 <div>
   <p align="center">
     <a href="https://github.com/TMUniversal/Emoji-Stealer/blob/master/package.json#L3">
@@ -44,6 +45,7 @@ To use this bot: [invite](https://discord.com/api/oauth2/authorize?client_id=726
 ## Installation
 
 Assuming you already have [Node.js] installed, install the required packages:
+
 > Please use the latest version on Node.js, as this project is constantly keeping up to date.
 > Emoji Stealer is built and tested with the latest version of Node.js
 
@@ -52,6 +54,7 @@ This project is built and tested with [yarn].
 - In the project folder: `yarn install`
 
 ##### Potential issues during installation
+
 On linux you may need additional dependencies for the image compression packages imagemin and addons. Not individually installing the [`imagemin`] packages has lead to errors on Ubuntu, see this [issue](https://github.com/TMUniversal/Emoji-Stealer/issues/31#issuecomment-664607038).
 
 ## Setup
@@ -59,7 +62,6 @@ On linux you may need additional dependencies for the image compression packages
 - Make a copy of [`data.example.json`], name it `data.json`.
 - Fill in the necessary values.
   - `owners` may be an array of strings
-
 
 ```JS
   {
@@ -146,17 +148,14 @@ Credits to [Hydractify] for their logging system.
 
 Emoji Stealer is released under the [MIT License](LICENSE.md).
 
-
 <!-- Getting started -->
 
-[Emoji Stealer]: https://github.com/TMUniversal/Emoji-Stealer
+[emoji stealer]: https://github.com/TMUniversal/Emoji-Stealer
 
 <!-- Installation -->
 
 [`imagemin`]: https://www.npmjs.com/package/imagemin
-
 [node.js]: https://nodejs.org/en/download/current/
-
 [yarn]: https://classic.yarnpkg.com/en/docs/install/
 
 <!-- Setup -->
@@ -165,4 +164,4 @@ Emoji Stealer is released under the [MIT License](LICENSE.md).
 
 <!-- Credits -->
 
-[Hydractify]: https://github.com/Hydractify/kanna_kobayashi
+[hydractify]: https://github.com/Hydractify/kanna_kobayashi

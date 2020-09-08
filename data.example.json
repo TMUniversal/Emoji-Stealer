@@ -10,8 +10,8 @@
   "owners": "",
   "userBlacklist": ["<some id>"],
   "counter": {
-		"namespace": "",
-		"emojiKey": "",
-		"pfpKey": ""
-	}
+    "namespace": "",
+    "emojiKey": "",
+    "pfpKey": ""
+  }
 }
