@@ -112,10 +112,10 @@
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.7.0.tgz#9a06f4f137ee84d7df0460c1fdb1135ffa6c50fd"
   integrity sha512-ONhaKPIufzzrlNbqtWFFd+jlnemX6lJAgq9ZeiZtS7I1PIf/la7CW4m83rTXRnVnsMbW2k56pGYu7AUFJD9Pow==
 
-"@tmuniversal/counter@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@tmuniversal/counter/-/counter-1.0.2.tgz#4ebead96f4a2e1568b6cd76183cbca1bcb770b0f"
-  integrity sha512-gBHIVQEROASXpaEcN4Ug6qxTk3DYTW9e88tvgU7/NaiVxx6iqqelre9dVD1btnoWEXl/NlX2iU7NZk/CMzEe6A==
+"@tmuniversal/counter@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@tmuniversal/counter/-/counter-1.0.4.tgz#60743f3159389a813a762679464dec9f85ddc4eb"
+  integrity sha512-nIXkmp3V+885B7Z3lC+LN5+QpapB4Bi6oPjVDS6nvn4kikV+O8uS7fgx7x48c9d+k+1F7HeH6uEmceNjmPAiQg==
 
 "@tmuniversal/ts@^1.0.3":
   version "1.0.3"

@@ -19,7 +19,7 @@
     "postversion": "git push && git push --tags"
   },
   "dependencies": {
-    "@tmuniversal/counter": "^1.0.2",
+    "@tmuniversal/counter": "^1.0.4",
     "@tmuniversal/weeb-wrapper": "^0.3.1",
     "@tmware/status-rotate": "^1.0.1",
     "app-root-path": "^3.0.0",
