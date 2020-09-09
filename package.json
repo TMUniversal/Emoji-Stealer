@@ -19,11 +19,11 @@
     "postversion": "git push && git push --tags"
   },
   "dependencies": {
-    "@tmuniversal/counter": "^1.0.2",
+    "@tmuniversal/counter": "^1.0.4",
     "@tmuniversal/weeb-wrapper": "^0.3.1",
-    "@tmware/status-rotate": "^1.0.1",
+    "@tmware/status-rotate": "^1.0.4",
     "app-root-path": "^3.0.0",
-    "axios": "~0.19.2",
+    "axios": "0.19.2",
     "countapi-js": "^1.0.1",
     "dblapi.js": "^2.4.1",
     "discord-akairo": "^8.1.0",
@@ -31,7 +31,7 @@
     "imagemin": "^7.0.1",
     "imagemin-gifsicle": "^7.0.0",
     "imagemin-jpegtran": "^7.0.0",
-    "imagemin-pngquant": "^9.0.0",
+    "imagemin-pngquant": "^9.0.1",
     "moment": "^2.24.0",
     "moment-duration-format": "^2.3.2"
   },
@@ -49,7 +49,7 @@
     "@types/ws": "^7.2.6",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^7.8.1",
-    "husky": "^4.2.5",
+    "husky": "^4.3.0",
     "rimraf": "^3.0.2",
     "ts-node-dev": "^1.0.0-pre.62",
     "typescript": "^4.0.2"
