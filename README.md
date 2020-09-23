@@ -51,11 +51,13 @@ Assuming you already have [Node.js] installed, install the required packages:
 
 This project is built and tested with [yarn].
 
+If you do not have yarn installed you can install it from their website or via npm: `npm install -g yarn`
+
 - In the project folder: `yarn install`
 
 ##### Potential issues during installation
 
-On linux you may need additional dependencies for the image compression packages imagemin and addons. Not individually installing the [`imagemin`] packages has lead to errors on Ubuntu, see this [issue](https://github.com/TMUniversal/Emoji-Stealer/issues/31#issuecomment-664607038).
+On linux you may need additional dependencies (on ubuntu: `automake`) for the image compression packages imagemin and addons. Not individually installing the [`imagemin`] packages (only via npm, yarn does not have this issue) has lead to errors on Ubuntu, see this [issue](https://github.com/TMUniversal/Emoji-Stealer/issues/31#issuecomment-664607038).
 
 ## Setup
 
@@ -75,7 +77,7 @@ On linux you may need additional dependencies for the image compression packages
     "prefix": ">",
     "owners": "<Your Discord ID>",
     "userBlacklist": ["<some id>"], // users that cannot use commands
-    "counter": { // persisting counters with countapi.xyz
+    "counter": { // persisting counters with countapi.xyz (may need manual creation)
       "namespace": "",
       "emojiKey": "",
       "pfpKey": ""
