@@ -1,16 +1,16 @@
 {
-  "apps": [{
+  "apps": [
+    {
       "name": "emoji-stealer",
       "script": "build/index.js",
       "instances": "1",
       "interpreter": "node@14.4.0",
       "watch": false,
-      "args": [
-          "--color"
-      ],
+      "args": ["--color"],
       "merge_logs": true,
       "output": "./logs/output.log",
       "error": "./logs/error.log",
       "autorestart": false
-  }]
+    }
+  ]
 }

@@ -1,4 +1,5 @@
 # Emoji Stealer
+
 <div>
   <p align="center">
     <a href="https://github.com/TMUniversal/Emoji-Stealer/blob/master/package.json#L3">
@@ -35,7 +36,7 @@
   </p>
 </div>
 
-# Getting Started
+## Getting Started
 
 [Emoji Stealer] is a Discord Bot that allows it's users to copy custom emojis from other guilds. Without downloads.
 
@@ -43,26 +44,31 @@ To use this bot: [invite](https://discord.com/api/oauth2/authorize?client_id=726
 
 ## Installation
 
-Assuming you have [Node.js](https://nodejs.org/en/download/current/) installed, install the required packages:
+Assuming you already have [Node.js] installed, install the required packages:
+
 > Please use the latest version on Node.js, as this project is constantly keeping up to date.
 > Emoji Stealer is built and tested with the latest version of Node.js
 
-- In the project folder: `npm install`
+This project is built and tested with [yarn].
+
+If you do not have yarn installed you can install it from their website or via npm: `npm install -g yarn`
+
+- In the project folder: `yarn install`
 
 ##### Potential issues during installation
-On linux you may need additional dependencies for the image compression packages imagemin and addons. Not individually installing the [`imagemin`] packages has lead to errors on Ubuntu, see this [issue](https://github.com/TMUniversal/Emoji-Stealer/issues/31#issuecomment-664607038).
+
+On linux you may need additional dependencies (on ubuntu: `automake`) for the image compression packages imagemin and addons. Not individually installing the [`imagemin`] packages (only via npm, yarn does not have this issue) has lead to errors on Ubuntu, see this [issue](https://github.com/TMUniversal/Emoji-Stealer/issues/31#issuecomment-664607038).
 
 ## Setup
 
 - Make a copy of [`data.example.json`], name it `data.json`.
-- Fill in the necessary values, remove the comment (since comments are not supported in JSON).
+- Fill in the necessary values.
   - `owners` may be an array of strings
-
 
 ```JS
   {
     "clientToken": "<Discord Bot Token>",
-    "webhook": {
+    "webhook": { // The bot will send logs to this discord webhook.
       "id": "",
       "secret": ""
     },
@@ -70,10 +76,8 @@ On linux you may need additional dependencies for the image compression packages
     "dblToken": "<Another token>", // Your top.gg api key. Used to upload stats.
     "prefix": ">",
     "owners": "<Your Discord ID>",
-    // OR
-    "owners": ["<Your Discord ID>", "<Another Discord ID>"],
     "userBlacklist": ["<some id>"], // users that cannot use commands
-    "counter": { // naming your emoji counters
+    "counter": { // persisting counters with countapi.xyz (may need manual creation)
       "namespace": "",
       "emojiKey": "",
       "pfpKey": ""
@@ -85,17 +89,26 @@ On linux you may need additional dependencies for the image compression packages
 
 To start the bot, it must first be complied.
 
-- Run `npm run build`
-- You may then start with `npm start` or, if you have pm2 installed: `pm2 start pm2-start.json`
-- Alternatively: Run `npm run cs` to build and then start.
+- Run `yarn build`
+- You may then start with `yarn start` or, if you have pm2 installed: `pm2 start pm2-start.json`
+- Alternatively: Run `yarn run cs` to build and then start.
+- This bot can easily be started with docker: `./scripts/docker.sh build`; `./scripts/docker.sh help` for more information.
 
-`npm run startmon` will launch the bot in monitor mode, i.e. it will reload anytime you save a file (unfit for production environments).
+## Updating
 
-# Using the bot
+To automatically get the latest updates and rebuild the code, use the update script: `./scripts/update.sh`
 
-## Commands
+Warning: The script will reset your local repository.
 
-### Basic
+After pulling the latest code (on your current branch), the script will re-build the source code.
+
+You have to restart your application, the script will not do that for you.
+
+## Using the bot
+
+### Commands
+
+#### Basic
 
 To get help or view information about this bot.
 
@@ -107,7 +120,7 @@ To get help or view information about this bot.
 
 `>invite` Generate an invite link, so you can invite this bot to your server
 
-### Copying Emojis
+#### Copying Emojis
 
 `>steal` Will open up a menu that explains the process.
 
@@ -129,22 +142,23 @@ To steal emojis, simply react to the message the bot sends with the custom emoji
 
 `>pfp [@user]` Will upload the profile picture of the mentioned user as an emoji _(mentioning a user is optional, if omitted this will upload your own profile picture)_
 
-# Credits
+## Credits
 
 Credits to [Hydractify] for their logging system.
 
-# License
+## License
 
 Emoji Stealer is released under the [MIT License](LICENSE.md).
 
-
 <!-- Getting started -->
 
-[Emoji Stealer]: https://github.com/TMUniversal/Emoji-Stealer
+[emoji stealer]: https://github.com/TMUniversal/Emoji-Stealer
 
 <!-- Installation -->
 
 [`imagemin`]: https://www.npmjs.com/package/imagemin
+[node.js]: https://nodejs.org/en/download/current/
+[yarn]: https://classic.yarnpkg.com/en/docs/install/
 
 <!-- Setup -->
 
@@ -152,4 +166,4 @@ Emoji Stealer is released under the [MIT License](LICENSE.md).
 
 <!-- Credits -->
 
-[Hydractify]: https://github.com/Hydractify/kanna_kobayashi
+[hydractify]: https://github.com/Hydractify/kanna_kobayashi

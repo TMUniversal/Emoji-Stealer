@@ -1,10 +1,9 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-title: "[BUG] Title"
+title: '[BUG] Title'
 labels: bug
 assignees: ''
-
 ---
 
 **Describe the bug**
@@ -12,6 +11,7 @@ A clear and concise description of what the bug is.
 
 **To Reproduce**
 Steps to reproduce the behavior:
+
 1. Entered command ...
 2. Bot did something
 3. See error / Unexpected behaviour

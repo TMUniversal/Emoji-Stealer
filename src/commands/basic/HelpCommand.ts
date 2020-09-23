@@ -7,7 +7,7 @@ import config from '../../config'
 export default class HelpCommand extends Command {
   public constructor () {
     super('help', {
-      aliases: ['help', '?'],
+      aliases: ['help'],
       category: 'basic',
       description: {
         content: 'Show help',
