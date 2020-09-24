@@ -53,11 +53,12 @@ export default class HelpCommand extends Command {
       const embed = new MessageEmbed()
         .setTitle(cmd.aliases[0])
         .setDescription(cmd.description.content)
-        .addField('Aliases', markdownCodifyArray(cmd.aliases), true)
-        .addField('Usage', `\`${cmd.description.usage}\``, true)
-        .addField('Examples', markdownCodifyArray(cmd.description.examples, '\n'))
         .setFooter(`${this.client.user.username} v${config.version}`)
         .setTimestamp()
+
+      if (cmd.aliases.slice(1).length > 0) embed.addField('Aliases', markdownCodifyArray(cmd.aliases.slice(1)), true)
+      if (cmd.description.usage) embed.addField('Usage', `\`${cmd.description.usage}\``, true)
+      if (cmd.description.examples) embed.addField('Examples', markdownCodifyArray(cmd.description.examples, '\n'))
 
       return message.util.send(embed)
     }
