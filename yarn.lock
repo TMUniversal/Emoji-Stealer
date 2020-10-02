@@ -195,10 +195,10 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
-"@types/imagemin-gifsicle@^5.2.0":
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/@types/imagemin-gifsicle/-/imagemin-gifsicle-5.2.0.tgz#349160f17412e26de8d5794e70aad504781ea7d8"
-  integrity sha512-WohEsNMyGYTc+u6WA7KUvX8g+uLgTJOhqteexGdGZ/TPyS65GuCzMJ1RTaSzqG/cIfLFxbxg/HbGBg8YJrNZaw==
+"@types/imagemin-gifsicle@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@types/imagemin-gifsicle/-/imagemin-gifsicle-7.0.0.tgz#80cfc5f68b2bbce57c6a3b97556ffa861a649132"
+  integrity sha512-RVFQZhPm/6vLC8wDvzHa34ZDrJECqmDV4XBS99AEk2ObyV4pcLQwObGYlmBv6fi9AtRLHf8mnKGczIHtF77u7w==
   dependencies:
     "@types/imagemin" "*"
 
