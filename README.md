@@ -30,11 +30,11 @@
   </p>
 </div>
 
+# This project is no longer in development and the bot has been shut down.
+
 ## Getting Started
 
 [Emoji Stealer] is a Discord Bot that allows it's users to copy custom emojis from other guilds. Without downloads.
-
-### This project is no longer in development and the bot has been shut down.
 
 To use this bot, you must host it yourself.
 
