@@ -5,12 +5,6 @@
     <a href="https://github.com/TMUniversal/Emoji-Stealer/blob/master/package.json#L3">
       <img src="https://img.shields.io/github/package-json/v/TMUniversal/Emoji-Stealer?style=flat&color=c4c4c4" />
     </a>
-    <a href="https://top.gg/bot/726731461310545920" >
-      <img src="https://top.gg/api/widget/status/726731461310545920.svg?noavatar=true" alt="Emoji Stealer" />
-    </a>
-    <a href="https://top.gg/bot/726731461310545920" >
-      <img src="https://top.gg/api/widget/servers/726731461310545920.svg?noavatar=true" alt="Emoji Stealer" />
-    </a>
     <a href="https://tmuniversal.eu/redirect/discord">
       <img src="https://img.shields.io/discord/727551682090762280.svg?style=flat&logo=discord">
     </a>
@@ -40,7 +34,11 @@
 
 [Emoji Stealer] is a Discord Bot that allows it's users to copy custom emojis from other guilds. Without downloads.
 
-To use this bot: [invite](https://discord.com/api/oauth2/authorize?client_id=726731461310545920&permissions=1074072576&scope=bot) it to your server, or host it yourself.
+### This project is no longer in development and the bot has been shut down.
+
+To use this bot, you must host it yourself.
+
+Useful reading: https://discordjs.guide/preparations/setting-up-a-bot-application.html#creating-your-bot
 
 ## Installation
 
@@ -49,15 +47,15 @@ Assuming you already have [Node.js] installed, install the required packages:
 > Please use the latest version on Node.js, as this project is constantly keeping up to date.
 > Emoji Stealer is built and tested with the latest version of Node.js
 
-This project is built and tested with [yarn].
+This project uses [yarn].
 
 If you do not have yarn installed you can install it from their website or via npm: `npm install -g yarn`
 
-- In the project folder: `yarn install`
+In the project folder, run `yarn install`
 
 ##### Potential issues during installation
 
-On linux you may need additional dependencies (on ubuntu: `automake`) for the image compression packages imagemin and addons. Not individually installing the [`imagemin`] packages (only via npm, yarn does not have this issue) has lead to errors on Ubuntu, see this [issue](https://github.com/TMUniversal/Emoji-Stealer/issues/31#issuecomment-664607038).
+On linux you may need additional dependencies (on ubuntu: `automake`) for the image compression packages imagemin and addons. Not individually installing the [`imagemin`] packages (only with npm, **yarn does not have this issue**) has lead to errors on Ubuntu, see this [issue](https://github.com/TMUniversal/Emoji-Stealer/issues/31#issuecomment-664607038).
 
 ## Setup
 
@@ -77,7 +75,7 @@ On linux you may need additional dependencies (on ubuntu: `automake`) for the im
     "prefix": ">",
     "owners": "<Your Discord ID>",
     "userBlacklist": ["<some id>"], // users that cannot use commands
-    "counter": { // persisting counters with countapi.xyz (may need manual creation)
+    "counter": { // persisting counters with countapi.xyz (may need manual creation). This counts the amount of emojis and profile pictures the bot has successfully uploaded.
       "namespace": "",
       "emojiKey": "",
       "pfpKey": ""
@@ -87,7 +85,7 @@ On linux you may need additional dependencies (on ubuntu: `automake`) for the im
 
 ## Starting
 
-To start the bot, it must first be complied.
+To start the bot, the code must first be complied.
 
 - Run `yarn build`
 - You may then start with `yarn start` or, if you have pm2 installed: `pm2 start pm2-start.json`
