@@ -154,16 +154,17 @@
   resolved "https://registry.yarnpkg.com/@tmware/prettier-config/-/prettier-config-1.0.1.tgz#32ef509bbb7edbfa2c872208df792e71b25a8061"
   integrity sha512-qIe+iMWe06teNvpePYPE+Sk3+Ih1DWADahdDu3j6c4SLmXPbkczwjEBwX/EN0HVcEB5jdy9GiXijGnmdxgouUQ==
 
-"@tmware/status-rotate@^1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@tmware/status-rotate/-/status-rotate-1.0.4.tgz#aef7c3b9f5c4d24b59b2cc7cfac6307fad5c9128"
-  integrity sha512-Z0T5UTMFsdAJQAoTsQzvuB21gOKuI2VROcesro25qXIAYSabrNnB6PituVp6ZA56PmrVmy2kMwyzz8vVa2q3RQ==
+"@tmware/status-rotate@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@tmware/status-rotate/-/status-rotate-1.0.5.tgz#8dc2acbf33512a7e7f2f1539a5fa0bd4f39251b5"
+  integrity sha512-G/kkKk6AQkYiORnqhl29RWAspJKW08mdahU8EeWYtIw4ZHqUBWfkX6wVF8sVh1eczTPvjSIRsoNdWS5cLU0oZQ==
   dependencies:
     "@tmware/jitsuyo" "^1.1.0"
     "@tmware/variable-parser" "^1.1.1"
     axios "0.19.2"
-    discord-akairo "^8.1.0"
     discord.js "^12.3.1"
+  optionalDependencies:
+    discord-akairo "^8.1.0"
 
 "@tmware/variable-parser@^1.1.1":
   version "1.1.1"
